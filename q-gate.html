@@ -1,0 +1,128 @@
+<!--
+  Copyright 2018 M. I. Bell
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/javascript">
+    RED.nodes.registerType('q-gate',{
+        category: 'function',
+        color: '#f3b567',
+        defaults: {
+            name: {value:""},
+            controlTopic: {value:"control"},
+            defaultState: {value:"open"},
+            openCmd: {value:"open"},
+            closeCmd: {value:"close"},
+            queueCmd: {value:"queue"}
+            toggleCmd: {value:"toggle"},
+            defaultCmd: {value:"default"},
+            triggerCmd: {value:"trigger"},
+            flushCmd: {value:"flush"},
+            purgeCmd: {value:"purge"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "arrow-in.png",
+        label: function() {
+            return this.name||"q-gate";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="q-gate">
+<!-- Topic -->
+    <div class="form-row">    
+        <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
+        <input type="text" id="node-input-topic" placeholder="Topic">
+    </div>
+<!-- controlTopic --> 
+    <div class="form-row">
+         <label for="node-input-controlTopic"> Control Topic</label>
+         <input type="text" id="node-input-controlTopic" placeholder="control">
+     </div>
+<!-- defaultState -->   
+    <div class="form-row">
+        <label for="node-input-func"> Default State</label>
+        <select type="text" id="node-input-defaultState" style="width:25%;">
+            <option value="open"> open</option>
+            <option value="closed"> closed</option>
+        </select>
+    </div>
+    <br/>
+<!-- commands -->
+    <div>Commands (case insensitive):</div>
+    <br/>
+<!-- openCmd --> 
+    <div class="form-row">
+         <label for="node-input-openCmd"><i class="fa fa-circle-o"></i> Open</label>
+         <input type="text" id="node-input-openCmd" placeholder="open">
+    </div>
+<!-- closeCmd --> 
+    <div class="form-row">
+         <label for="node-input-closeCmd"><i class="fa fa-circle"></i> Close</label>
+         <input type="text" id="node-input-closeCmd" placeholder="close">
+    </div>
+<!-- toggleCmd --> 
+    <div class="form-row">
+         <label for="node-input-toggleCmd"><i class="fa fa-arrows-v"></i> Toggle </label>
+         <input type="text" id="node-input-toggleCmd" placeholder="toggle">
+    </div>
+<!-- queueCmd --> 
+    <div class="form-row">
+         <label for="node-input-queueCmd"><i class="fa fa-dot-circle-o"></i> Queue</label>
+         <input type="text" id="node-input-defaultCmd" placeholder="default">
+    </div>
+    
+<!-- triggerCmd --> 
+    <div class="form-row">
+         <label for="node-input-triggerCmd"><i class="fa fa-dot-circle-o"></i> Trigger</label>
+         <input type="text" id="node-input-defaultCmd" placeholder="trigger">
+    </div>
+<!-- flushCmd --> 
+    <div class="form-row">
+         <label for="node-input-queueCmd"><i class="fa fa-dot-circle-o"></i> Flush</label>
+         <input type="text" id="node-input-flushCmd" placeholder="flush">
+    </div>
+<!-- purgeCmd --> 
+    <div class="form-row">
+         <label for="node-input-purgeCmd"><i class="fa fa-dot-circle-o"></i> Purge</label>
+         <input type="text" id="node-input-purgeCmd" placeholder="purge">
+    </div>
+ <!-- defaultCmd --> 
+    <div class="form-row">
+         <label for="node-input-defaultCmd"><i class="fa fa-dot-circle-o"></i> Default</label>
+         <input type="text" id="node-input-defaultCmd" placeholder="default">
+    </div>
+    <br/>
+    <!-- Name -->  
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="q-gate">
+    <p>Transmits the input message when in the <code>open</code> state, blocks it when
+    <code>closed</code>, and adds it to the message queue when in the <code>queueing</code> 
+    state and the queue is not full. </p>
+    <p>Messages with the topic <code>Control Topic</code> are control messages, which set 
+    the state of the gate. Control messages can have values representing <code>on</code>,
+    <code>off</code>, <code>toggle</code>, <code>queue</code>, <code>trigger</code>, 
+    <code>flush</code>, <code>purge</code>, and <code>default</code>. </p>
+    <p>When first deployed or after a <code>default</code> command, the gate is in the 
+    state defined by <code>Default State</code>.<p>
+</script>

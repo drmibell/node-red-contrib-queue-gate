@@ -1,0 +1,16 @@
+{
+    "name"         : "node-red-contrib-queue-gate",
+    "version"      : "0.0.1",
+    "description"  : "A gate node (with queueing) for node-RED",
+    "license"      : "Apache-2.0",
+    "author"       : "Michael.I. Bell",
+    "e-mail"       : "dr.m.i.bell@gmail.com",
+    "dependencies" : {},
+    "keywords"     : [ "gate", "flow control", "queue"],
+    "homepage"     : "https://github.com/drmibell/node-red-contrib-queue-gate",
+    "node-red"     : {
+        "nodes": {
+            "gate": "q-gate.js"
+        }
+    }
+}

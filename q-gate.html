@@ -60,6 +60,7 @@
         <select type="text" id="node-input-defaultState" style="width:25%;">
             <option value="open"> open</option>
             <option value="closed"> closed</option>
+            <option value="queueing"> queueing</option>
         </select>
     </div>
     <br/>
@@ -83,23 +84,22 @@
     </div>
 <!-- queueCmd --> 
     <div class="form-row">
-         <label for="node-input-queueCmd"><i class="fa fa-dot-circle-o"></i> Queue</label>
-         <input type="text" id="node-input-defaultCmd" placeholder="default">
+         <label for="node-input-queueCmd"><i class="fa fa-pause"></i> Queue</label>
+         <input type="text" id="node-input-queueCmd" placeholder="queue">
     </div>
-    
 <!-- triggerCmd --> 
     <div class="form-row">
-         <label for="node-input-triggerCmd"><i class="fa fa-dot-circle-o"></i> Trigger</label>
-         <input type="text" id="node-input-defaultCmd" placeholder="trigger">
+         <label for="node-input-triggerCmd"><i class="fa fa-play"></i> Trigger</label>
+         <input type="text" id="node-input-triggerCmd" placeholder="trigger">
     </div>
 <!-- flushCmd --> 
     <div class="form-row">
-         <label for="node-input-queueCmd"><i class="fa fa-dot-circle-o"></i> Flush</label>
+         <label for="node-input-flushCmd"><i class="fa fa-forward"></i> Flush</label>
          <input type="text" id="node-input-flushCmd" placeholder="flush">
     </div>
 <!-- purgeCmd --> 
     <div class="form-row">
-         <label for="node-input-purgeCmd"><i class="fa fa-dot-circle-o"></i> Purge</label>
+         <label for="node-input-purgeCmd"><i class="fa fa-eject"></i> Purge</label>
          <input type="text" id="node-input-purgeCmd" placeholder="purge">
     </div>
  <!-- defaultCmd --> 

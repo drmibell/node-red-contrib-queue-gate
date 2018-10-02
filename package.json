@@ -10,7 +10,7 @@
     "homepage"     : "https://github.com/drmibell/node-red-contrib-queue-gate",
     "node-red"     : {
         "nodes": {
-            "gate": "q-gate.js"
+            "q-gate": "q-gate.js"
         }
     }
 }

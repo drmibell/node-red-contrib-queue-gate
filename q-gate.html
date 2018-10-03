@@ -120,9 +120,9 @@
     <code>closed</code>, and adds it to the message queue when in the <code>queueing</code> 
     state and the queue is not full. </p>
     <p>Messages with the topic <code>Control Topic</code> are control messages, which set 
-    the state of the gate. Control messages can have values representing <code>on</code>,
-    <code>off</code>, <code>toggle</code>, <code>queue</code>, <code>trigger</code>, 
-    <code>flush</code>, <code>purge</code>, and <code>default</code>. </p>
+    the state of the gate or manage the message queue. Control messages can have values
+    representing <code>on</code>, <code>off</code>, <code>toggle</code>, <code>queue</code>, 
+    <code>trigger</code>, <code>flush</code>, <code>purge</code>, and <code>default</code>. </p>
     <p>When first deployed or after a <code>default</code> command, the gate is in the 
     state defined by <code>Default State</code>.<p>
 </script>

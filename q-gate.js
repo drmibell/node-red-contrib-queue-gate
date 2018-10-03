@@ -19,7 +19,7 @@ module.exports = function(RED) {
         const openStatus = {fill:'green',shape:'dot',text:'open'};
         const closedStatus = {fill:'red',shape:'dot',text:'closed'};
         const queueingStatus = {fill:'yellow',shape:'ring',text:'queuing: 0'};
-        const maxQueueLength = 100;
+        var maxQueueLength;
         var qStatusText;
         var qStatusLength;
         var qStatusShape;
@@ -34,12 +34,14 @@ module.exports = function(RED) {
         this.purgeCmd = config.purgeCmd.toLowerCase();
         this.defaultCmd = config.defaultCmd.toLowerCase();
         this.defaultState = config.defaultState.toLowerCase();
+        this.maxQueueLength = config.maxQueueLength;
         // Save "this" object
         var node = this;
-        // Initialize queue
-        var queue = [];
-        // Display gate status
+        // Gate status & max queue size
         var state = node.defaultState;
+        if (node.maxQueueLength <= 0) {
+            node.maxQueueLength = Infinity;
+        }
         // Initialize status display
         switch (state) {
             case 'open':
@@ -48,20 +50,29 @@ module.exports = function(RED) {
             case 'closed':
                 node.status(closedStatus);
                 break;
-            default:
+            case 'queueing':
                 node.status(queueingStatus);
+                break;
+            default:
+                node.error('Invalid state');
         }
         // Process inputs
         node.on('input', function(msg) {
             var context = node.context();
             var state = context.get('state') || node.defaultState;
+            var queue = context.get('queue') || []
             if (msg.topic !== undefined && msg.topic.toLowerCase() === node.controlTopic) {
             // Change state
                 switch (msg.payload.toLowerCase()) {
                     case node.openCmd:
+                    // flush then open
+                        node.send([queue]);
+                        queue =[];
                         state = 'open';
                         break;
                     case node.closeCmd:
+                    // purge then close
+                        queue = [];
                         state = 'closed';
                         break;
                     case node.queueCmd:
@@ -81,21 +92,19 @@ module.exports = function(RED) {
                         if (state === 'queueing') {
                         // Dequeue
                         if (queue.length > 0) {
-                            node.send(queue.pop);
+                            node.send(queue.shift());
                             }
                         }
                         break;
                     case node.flushCmd:
-                        node.send(queue);
-                        break;
+                        node.send([queue]);
                     case node.purgeCmd:
                         queue = [];
                         node.status(queueingStatus);
                         break;
                     case node.defaultCmd:
-                        if (state === 'queueing') {
-                            queue = [];
-                            }
+                    // purge then default
+                        queue = [];
                         state = node.defaultState;
                         break;
                     default:
@@ -104,6 +113,7 @@ module.exports = function(RED) {
                 }
                 // Save state
                 context.set('state',state);
+                context.set('queue',queue);
                 // Show status
                 switch (state) {
                     case 'open':
@@ -126,21 +136,21 @@ module.exports = function(RED) {
                     case 'closed':
                         node.send(null);
                         break;
-                   case 'queueing':
+                    case 'queueing':
                         // Enqueue
-                        if (queue.length == maxQueueLength){
-                            node.send(null);
-                            qStatusShape = 'dot';
-                        }
-                        else {
+                        if (queue.length < node.maxQueueLength) {
                             queue.push(msg);
+                            if (queue.length < node.maxQueueLength) {
                             qStatusShape = 'ring';
-                        }
+                            } else {
+                            qStatusShape = 'dot';
+                            }
                         qStatusLength = queue.length;
                         qStatusText = 'queuing: ' + qStatusLength;
                         node.status({fill:'yellow',shape:qStatusShape,text:qStatusText});
                         }
                 }
+            }
         });
     }
     RED.nodes.registerType("q-gate",QueueGateNode);

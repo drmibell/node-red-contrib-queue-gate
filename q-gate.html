@@ -24,16 +24,17 @@
             defaultState: {value:"open"},
             openCmd: {value:"open"},
             closeCmd: {value:"close"},
-            queueCmd: {value:"queue"}
             toggleCmd: {value:"toggle"},
+            queueCmd: {value:"queue"}
             defaultCmd: {value:"default"},
             triggerCmd: {value:"trigger"},
             flushCmd: {value:"flush"},
-            purgeCmd: {value:"purge"}
+            purgeCmd: {value:"purge"},
+            maxQueueLength: {value:"100"}
         },
         inputs:1,
         outputs:1,
-        icon: "arrow-in.png",
+        icon: "queue.png",
         label: function() {
             return this.name||"q-gate";
         },
@@ -51,61 +52,59 @@
     </div>
 <!-- controlTopic --> 
     <div class="form-row">
-         <label for="node-input-controlTopic"> Control Topic</label>
+         <label for="node-input-controlTopic"><i class="fa fa-cog"></i> Control Topic</label>
          <input type="text" id="node-input-controlTopic" placeholder="control">
      </div>
-<!-- defaultState -->   
+<!-- defaultState & max queue length -->   
     <div class="form-row">
-        <label for="node-input-func"> Default State</label>
-        <select type="text" id="node-input-defaultState" style="width:25%;">
+        <label for="node-input-func"><i class="fa fa-refresh"></i> Default State</label>
+        <select type="text" id="node-input-defaultState" style="width:20%">
             <option value="open"> open</option>
             <option value="closed"> closed</option>
             <option value="queueing"> queueing</option>
         </select>
+        <span style="color:transparent">xxxxxx</span>
+        <label for="node-input-maxQueueLength"><i class="fa fa-exclamation-triangle"></i> Max queue (<1, no limit)</label>
+        <input type="number" id="node-input-maxQueueLength" placeholder="100" style="width:20%">
     </div>
     <br/>
 <!-- commands -->
     <div>Commands (case insensitive):</div>
     <br/>
-<!-- openCmd --> 
+    <div>Gating</div>
+<!-- openCmd &- toggleCmd--> 
     <div class="form-row">
-         <label for="node-input-openCmd"><i class="fa fa-circle-o"></i> Open</label>
-         <input type="text" id="node-input-openCmd" placeholder="open">
+      <label for="node-input-openCmd"><i class="fa fa-circle-o"></i> Open</label>
+      <input type="text" id="node-input-openCmd" placeholder="open" style="width:20%;">
+      <span style="color:transparent">xxxxxx</span>
+      <label for="node-input-toggleCmd"><i class="fa fa-arrows-v"></i> Toggle </label>
+      <input type="text" id="node-input-toggleCmd" placeholder="toggle" style="width:20%;">
     </div>
-<!-- closeCmd --> 
+<!-- closeCmd & defaultCmd--> 
     <div class="form-row">
          <label for="node-input-closeCmd"><i class="fa fa-circle"></i> Close</label>
-         <input type="text" id="node-input-closeCmd" placeholder="close">
+         <input type="text" id="node-input-closeCmd" placeholder="close" style="width:20%;">
+         <span style="color:transparent">xxxxxx</span>
+         <label for="node-input-defaultCmd"><i class="fa fa-dot-circle-o"></i> Default</label>
+         <input type="text" id="node-input-defaultCmd" placeholder="default" style="width:20%">
     </div>
-<!-- toggleCmd --> 
-    <div class="form-row">
-         <label for="node-input-toggleCmd"><i class="fa fa-arrows-v"></i> Toggle </label>
-         <input type="text" id="node-input-toggleCmd" placeholder="toggle">
-    </div>
-<!-- queueCmd --> 
+    <br/>
+    <div>Queuing</div>
+<!-- queueCmd & triggerCmd--> 
     <div class="form-row">
          <label for="node-input-queueCmd"><i class="fa fa-pause"></i> Queue</label>
-         <input type="text" id="node-input-queueCmd" placeholder="queue">
+         <input type="text" id="node-input-queueCmd" placeholder="queue" style="width:20%">
+         <span style="color:transparent">xxxxxx</span>
+         <label for="node-input-triggerCmd"><i class="fa fa-step-forward"></i> Trigger</label>
+         <input type="text" id="node-input-triggerCmd" placeholder="trigger" style="width:20%">
     </div>
-<!-- triggerCmd --> 
-    <div class="form-row">
-         <label for="node-input-triggerCmd"><i class="fa fa-play"></i> Trigger</label>
-         <input type="text" id="node-input-triggerCmd" placeholder="trigger">
-    </div>
-<!-- flushCmd --> 
+<!-- flushCmd & purgeCmd --> 
     <div class="form-row">
          <label for="node-input-flushCmd"><i class="fa fa-forward"></i> Flush</label>
-         <input type="text" id="node-input-flushCmd" placeholder="flush">
-    </div>
-<!-- purgeCmd --> 
-    <div class="form-row">
+         <input type="text" id="node-input-flushCmd" placeholder="flush" style="width:20%">
+         <span style="color:transparent">xxxxxx</span>
          <label for="node-input-purgeCmd"><i class="fa fa-eject"></i> Purge</label>
-         <input type="text" id="node-input-purgeCmd" placeholder="purge">
-    </div>
- <!-- defaultCmd --> 
-    <div class="form-row">
-         <label for="node-input-defaultCmd"><i class="fa fa-dot-circle-o"></i> Default</label>
-         <input type="text" id="node-input-defaultCmd" placeholder="default">
+         <input type="text" id="node-input-purgeCmd" placeholder="purge" style="width:20%">
     </div>
     <br/>
     <!-- Name -->  
@@ -120,9 +119,10 @@
     <code>closed</code>, and adds it to the message queue when in the <code>queueing</code> 
     state and the queue is not full. </p>
     <p>Messages with the topic <code>Control Topic</code> are control messages, which set 
-    the state of the gate or manage the message queue. Control messages can have values
-    representing <code>on</code>, <code>off</code>, <code>toggle</code>, <code>queue</code>, 
-    <code>trigger</code>, <code>flush</code>, <code>purge</code>, and <code>default</code>. </p>
+    the state of the gate or manage the queue. Control messages setting the state are 
+    <code>open</code>, <code>close</code>, <code>toggle</code>, <code>queue</code>, and 
+    <code>default</code>. Those managing the queue are <code>trigger</code>, 
+    <code>flush</code> and <code>purge</code>. </p>
     <p>When first deployed or after a <code>default</code> command, the gate is in the 
     state defined by <code>Default State</code>.<p>
 </script>

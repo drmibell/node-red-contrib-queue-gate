@@ -18,17 +18,16 @@ Messages with the user-defined topic `Control Topic` (set when the node is deplo
 Control messages can have values representing commands that change the state of the gate: `open`, `close`, `toggle`, `queue`, or `default` Messages that control the queue are `trigger`, `flush` and `purge`. The (case-insensitive) strings representing these commands are set by the user when the node is deployed. If a control message is received but not recognized, there is no output or change of state, and the node reports an error.
 
 When first deployed or after a `default` command, the gate is in the user-selected state defined by `Default State`. When a valid control message is received, the gate performs one of the following actions:
-<p align="center">
-  <img width="85%" src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/images/actions.png">
-</p>
+
+<img  src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/images/actions.png?raw=true">
 where flush = send all queued messages; purge = delete all queued messages; dequeue = send oldest message in queue
 
 The specified behaviors of the queuing state (flush before opening, purge before closing, and purge before default) can be reversed by sending a sequence of commands, i.e., [purge, open], [flush, close] or [flush, default].
 
 ## Node status
 The state of the gate is indicated by a status object: 
-<p align="center">
-<img width="85%" src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/images/status.png")</p>
+
+<img src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/images/status.png?raw=true>
 
 where n = the number of messages in the queue.
 

@@ -6,7 +6,7 @@
     "author"       : "Michael.I. Bell",
     "e-mail"       : "dr.m.i.bell@gmail.com",
     "dependencies" : {},
-    "keywords"     : [ "gate", "flow control", "queue"],
+    "keywords"     : [ "node-red", "gate", "flow control", "queue"],
     "homepage"     : "https://github.com/drmibell/node-red-contrib-queue-gate",
     "node-red"     : {
         "nodes": {

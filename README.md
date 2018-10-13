@@ -27,7 +27,7 @@ The specified behaviors of the queuing state (flush before opening, purge before
 ## Node status
 The state of the gate is indicated by a status object: 
 
-<img src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/images/status.png?raw=true>
+<img src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/images/status.png?raw=true">
 
 where n = the number of messages in the queue.
 

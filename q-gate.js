@@ -39,6 +39,10 @@ module.exports = function(RED) {
         var node = this;
         // Gate status & max queue size
         var state = node.defaultState;
+        var queue = [];
+        var context = node.context();
+        context.set('state',state);
+        context.set('queue',queue);
         if (node.maxQueueLength <= 0) {
             node.maxQueueLength = Infinity;
         }
@@ -58,7 +62,6 @@ module.exports = function(RED) {
         }
         // Process inputs
         node.on('input', function(msg) {
-            var context = node.context();
             var state = context.get('state') || node.defaultState;
             var queue = context.get('queue') || []
             if (msg.topic !== undefined && msg.topic.toLowerCase() === node.controlTopic) {

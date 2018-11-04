@@ -31,7 +31,7 @@ module.exports = function(RED) {
         this.queueCmd = config.queueCmd.toLowerCase();
         this.triggerCmd = config.triggerCmd.toLowerCase();
         this.flushCmd = config.flushCmd.toLowerCase();
-        this.purgeCmd = config.purgeCmd.toLowerCase();
+        this.resetCmd = config.resetCmd.toLowerCase();
         this.defaultCmd = config.defaultCmd.toLowerCase();
         this.defaultState = config.defaultState.toLowerCase();
         this.maxQueueLength = config.maxQueueLength;
@@ -74,7 +74,7 @@ module.exports = function(RED) {
                         state = 'open';
                         break;
                     case node.closeCmd:
-                    // purge then close
+                    // reset then close
                         queue = [];
                         state = 'closed';
                         break;
@@ -101,12 +101,12 @@ module.exports = function(RED) {
                         break;
                     case node.flushCmd:
                         node.send([queue]);
-                    case node.purgeCmd:
+                    case node.resetCmd:
                         queue = [];
                         node.status(queueingStatus);
                         break;
                     case node.defaultCmd:
-                    // purge then default
+                    // reset then default
                         queue = [];
                         state = node.defaultState;
                         break;

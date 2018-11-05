@@ -20,7 +20,7 @@ Control messages can have values representing commands that change the state of 
 When first deployed or after a `default` command, the gate is in the user-selected state defined by `Default State`. When a valid control message is received, the gate performs one of the following actions:
 
 <img  src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/images/actions.png?raw=true">
-where flush = send all queued messages; reset = delete all queued messages; dequeue = send oldest message in queue
+where flush = send all queued messages; reset = delete all queued messages; dequeue = send oldest message in queue.
 
 The specified behaviors of the queuing state (flush before opening, reset before closing, and reset before default) can be reversed by sending a sequence of commands, i.e., [reset, open], [flush, close] or [flush, default].
 

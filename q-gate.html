@@ -29,7 +29,7 @@
             defaultCmd: {value:"default"},
             triggerCmd: {value:"trigger"},
             flushCmd: {value:"flush"},
-            purgeCmd: {value:"purge"},
+            resetCmd: {value:"reset"},
             maxQueueLength: {value:"100"}
         },
         inputs:1,
@@ -98,13 +98,13 @@
          <label for="node-input-triggerCmd"><i class="fa fa-step-forward"></i> Trigger</label>
          <input type="text" id="node-input-triggerCmd" placeholder="trigger" style="width:20%">
     </div>
-<!-- flushCmd & purgeCmd --> 
+<!-- flushCmd & resetCmd --> 
     <div class="form-row">
          <label for="node-input-flushCmd"><i class="fa fa-forward"></i> Flush</label>
          <input type="text" id="node-input-flushCmd" placeholder="flush" style="width:20%">
          <span style="color:transparent">xxxxxx</span>
-         <label for="node-input-purgeCmd"><i class="fa fa-eject"></i> Purge</label>
-         <input type="text" id="node-input-purgeCmd" placeholder="purge" style="width:20%">
+         <label for="node-input-resetCmd"><i class="fa fa-eject"></i> Reset</label>
+         <input type="text" id="node-input-resetCmd" placeholder="reset" style="width:20%">
     </div>
     <br/>
     <!-- Name -->  
@@ -122,7 +122,7 @@
     the state of the gate or manage the queue. Control messages setting the state are 
     <code>open</code>, <code>close</code>, <code>toggle</code>, <code>queue</code>, and 
     <code>default</code>. Those managing the queue are <code>trigger</code>, 
-    <code>flush</code> and <code>purge</code>. </p>
+    <code>flush</code> and <code>reset</code>. </p>
     <p>When first deployed or after a <code>default</code> command, the gate is in the 
     state defined by <code>Default State</code>.<p>
 </script>

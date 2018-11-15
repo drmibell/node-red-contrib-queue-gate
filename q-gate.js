@@ -17,7 +17,7 @@ module.exports = function(RED) {
     function QueueGateNode(config) {
         RED.nodes.createNode(this,config);
         const openStatus = {fill:'green',shape:'dot',text:'open'};
-        const closedStatus = {fill:'red',shape:'dot',text:'closed'};
+        const closedStatus = {fill:'red',shape:'ring',text:'closed'};
         const queueingStatus = {fill:'yellow',shape:'ring',text:'queuing: 0'};
         var maxQueueLength;
         var qStatusText;

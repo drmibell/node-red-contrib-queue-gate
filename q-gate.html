@@ -30,7 +30,8 @@
             triggerCmd: {value:"trigger"},
             flushCmd: {value:"flush"},
             resetCmd: {value:"reset"},
-            maxQueueLength: {value:"100"}
+            maxQueueLength: {value:"100"},
+            keepNewest: {value:false}
         },
         inputs:1,
         outputs:1,
@@ -51,7 +52,7 @@
          <label for="node-input-controlTopic"><i class="fa fa-cog"></i> Control Topic</label>
          <input type="text" id="node-input-controlTopic" placeholder="control">
      </div>
-<!-- defaultState & max queue length -->   
+<!-- defaultState -->   
     <div class="form-row">
         <label for="node-input-func"><i class="fa fa-refresh"></i> Default State</label>
         <select type="text" id="node-input-defaultState" style="width:20%">
@@ -59,17 +60,13 @@
             <option value="closed"> closed</option>
             <option value="queueing"> queueing</option>
         </select>
-        <span style="color:transparent">xxxxxx</span>
-        <label for="node-input-maxQueueLength"><i class="fa fa-exclamation-triangle"></i> 
-        Max queue (< 1, no limit)</label>
-        <input type="number" id="node-input-maxQueueLength" placeholder="100" style="width:20%">
     </div>
     <br/>
 <!-- commands -->
     <div>Commands (case insensitive):</div>
     <br/>
     <div>Gating</div>
-<!-- openCmd &- toggleCmd--> 
+<!-- openCmd & toggleCmd--> 
     <div class="form-row">
       <label for="node-input-openCmd"><i class="fa fa-circle-o"></i> Open</label>
       <input type="text" id="node-input-openCmd" placeholder="open" style="width:20%;">
@@ -103,6 +100,16 @@
          <label for="node-input-resetCmd"><i class="fa fa-eject"></i> Reset</label>
          <input type="text" id="node-input-resetCmd" placeholder="reset" style="width:20%">
     </div>
+<!-- max queue length & keep newest -->
+    <div class="form-row">
+        <span style="color:transparent">xxxxxx</span>
+        <label for="node-input-maxQueueLength"><i class="fa fa-exclamation-triangle"></i> 
+        Max queue (< 1, no limit)</label>
+        <input type="number" id="node-input-keepNewest" placeholder="100" style="width:20%">
+        <label for="node-input-keepNewest" style="width:25%; display:inline"></label>
+        <label for="node-input-keepNewest" style="width:25%; display:inline">
+            <input type="checkbox" id="node-input-persist" style="display:inline-block; width:15px; vertical-align:baseline;">
+        <span>Keep newest messages</span></label>
     <br/>
     <!-- Name -->  
     <div class="form-row">
@@ -115,6 +122,8 @@
     <p>Transmits the input message when in the <code>open</code> state, blocks it when
     <code>closed</code>, and adds it to the message queue when in the <code>queueing</code> 
     state and the queue is not full. </p>
+    <p> When the queue is full, the user has the choice keeping either the oldest or the newest
+    messages.</p>
     <p>Messages with the topic <code>Control Topic</code> are control messages, which set 
     the state of the gate or manage the queue. Control messages setting the state are 
     <code>open</code>, <code>close</code>, <code>toggle</code>, <code>queue</code>, and 

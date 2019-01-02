@@ -101,23 +101,25 @@
          <input type="text" id="node-input-resetCmd" placeholder="reset" style="width:20%">
     </div>
 <!-- max queue length & keep newest -->
-    <div class="form-row">
-        <span style="color:transparent">xxxxxx</span>
+<!--    <div class="form-row">
         <label for="node-input-maxQueueLength"><i class="fa fa-exclamation-triangle"></i> 
         Max queue (< 1, no limit)</label>
-        <input type="number" id="node-input-keepNewest" placeholder="100" style="width:20%">
+        <input type="number" id="node-input-maxQueueLength" placeholder="100" style="width:20%">
+        <span style="color:transparent">xxxxxx</span>
         <label for="node-input-keepNewest" style="width:25%; display:inline"></label>
         <label for="node-input-keepNewest" style="width:25%; display:inline">
-            <input type="checkbox" id="node-input-persist" style="display:inline-block; width:15px; vertical-align:baseline;">
+        <input type="checkbox" id="node-input-keepNewest" style="display:inline-block; width:15px; vertical-align:baseline;">
         <span>Keep newest messages</span></label>
+    </div>
     <br/>
     <!-- Name -->  
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
+-->
 </script>
-
+<!-- help text -->
 <script type="text/x-red" data-help-name="q-gate">
     <p>Transmits the input message when in the <code>open</code> state, blocks it when
     <code>closed</code>, and adds it to the message queue when in the <code>queueing</code> 

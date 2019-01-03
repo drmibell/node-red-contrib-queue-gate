@@ -40,7 +40,7 @@ This flow demonstrates the basic operation of the `q-gate` node and the commands
 <img src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/screenshots/q-gate-demo.png?raw=true"/>
 
 ### Save Most Recent Message
-This flow, as noted above, saves the most recent message in the queue and releases it when a `trigger`, `flush`, or `open` command is received. Note that if the `open` command is used, the gate will remain open until a `queue` or `default` command is received to retore the original mode of operation.
+This flow, as noted above, saves the most recent message in the queue and releases it when a `trigger`, `flush`, or `open` command is received. (Note that if the `open` command is used, the gate will remain open until a `queue` or `default` command is received to restore the original mode of operation.) The `q-gate` is configured with `Default State = queueing`, `Maximum Queue Length = 1`, and `Keep Newest Messages = true`.
 
 <img src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/screenshots/q-gate-keep-newest.png?raw=true"/>
 

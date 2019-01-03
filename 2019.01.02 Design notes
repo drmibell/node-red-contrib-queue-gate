@@ -1,0 +1,17 @@
+// Enqueue
+queue.push(msg);
+push() add an element to the end of the array
+
+// Dequeue
+node.send(queue.shift());
+shift() removes the first array element and shifts all other elements to a lower index
+
+// Flush
+node.send([queue]);
+node.send() sends messages in array order, lowest index first
+
+Conclusion: lowest index = oldest message
+Enqueue with keepNewest = true should push incoming message and shift array
+
+queue.push(msg);
+queue.shift();

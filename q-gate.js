@@ -35,6 +35,7 @@ module.exports = function(RED) {
         this.defaultCmd = config.defaultCmd.toLowerCase();
         this.defaultState = config.defaultState.toLowerCase();
         this.maxQueueLength = config.maxQueueLength;
+        this.keepNewest = config.keepNewest;
         // Save "this" object
         var node = this;
         // Gate status & max queue size
@@ -129,9 +130,8 @@ module.exports = function(RED) {
                         node.status({fill:'yellow',shape:'ring',text:'queuing: ' + queue.length});
                     }
                 node.send(null);
-            }
-            else {
-            // Process message
+            } else {
+                // Process message
                 switch (state) {
                     case 'open':
                         node.send(msg);
@@ -143,7 +143,13 @@ module.exports = function(RED) {
                         // Enqueue
                         if (queue.length < node.maxQueueLength) {
                             queue.push(msg);
-                            if (queue.length < node.maxQueueLength) {
+                        } else {
+                        if (node.keepNewest) {
+                            queue.push(msg);
+                            queue.shift();
+                            }
+                        }
+                        if (queue.length < node.maxQueueLength) {
                             qStatusShape = 'ring';
                             } else {
                             qStatusShape = 'dot';
@@ -151,10 +157,12 @@ module.exports = function(RED) {
                         qStatusLength = queue.length;
                         qStatusText = 'queuing: ' + qStatusLength;
                         node.status({fill:'yellow',shape:qStatusShape,text:qStatusText});
-                        }
+                        break;
+                    default:
+                        node.error('Invalid state');
+                    }
                 }
-            }
-        });
-    }
+            })
+        }
     RED.nodes.registerType("q-gate",QueueGateNode);
 }

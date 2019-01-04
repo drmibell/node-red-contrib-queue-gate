@@ -11,7 +11,9 @@ Either use the Manage Palette option in the Node-RED Editor menu, or run the fol
 
 The `q-gate` node is similar to the `gate` node published as [node-red-contrib-simple-gate](https://flows.nodered.org/node/node-red-contrib-simple-gate) but with the added capability of queueing messages and releasing them when triggered. 
 
-The node will transmit the input message to its output when in the `open` state and block it when `closed`. In the `queueing` state, the input message is added to the end of the message queue, provided space is available. The user can limit the size of the queue to prevent memory problems. Messages arriving when the queue is full are discarded by default, but the user can select the `Keep newest messages` checkbox to have new messages added to the queue (at the tail), while discarding the oldest message (from the head). This feature makes it possible to retain the most recent message and deliver it on request, as shown in the example below. Messages in the queue can be released (in the order received) either singly or the entire queue at once.
+The node will transmit the input message to its output when in the `open` state and block it when `closed`. In the `queueing` state, the input message is added to the end of the message queue, provided space is available.  Messages in the queue can be released (in the order received) either singly or the entire queue at once.
+
+The user can limit the size of the queue to prevent memory problems. Messages arriving when the queue is full are discarded by default, so that the queue contains the oldest messages. However, the user can select the `Keep newest messages` checkbox to have new messages added to the queue (at the tail), while discarding the oldest message (from the head), so that the queue contains the most recent messages. This feature makes it possible to retain only the latest message and deliver it on request, as shown in the example below.
 
 Messages with the user-defined topic `Control Topic` (set when the node is deployed) are not passed through but are used to control the state of the gate or the queue.
 
@@ -22,7 +24,7 @@ When first deployed or after a `default` command, the gate is in the user-select
 <img  src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/images/actions.png?raw=true">
 where flush = send all queued messages; reset = delete all queued messages; dequeue = send oldest message in queue.
 
-The specified behaviors of the queuing state (flush before opening, reset before closing, and reset before default) can be reversed by sending a sequence of commands, i.e., [reset, open], [flush, close] or [flush, default].
+The specified behaviors of the `queueing` state (flush before opening, reset before closing, and reset before default) can be reversed by sending a sequence of commands, i.e., [reset, open], [flush, close] or [flush, default].
 
 ## Node status
 The state of the gate is indicated by a status object: 

@@ -18,11 +18,8 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
         const openStatus = {fill:'green',shape:'dot',text:'open'};
         const closedStatus = {fill:'red',shape:'ring',text:'closed'};
-        const queueingStatus = {fill:'yellow',shape:'ring',text:'queuing: 0'};
+        var queueStatus = {fill:'yellow'};
         var maxQueueLength;
-        var qStatusText;
-        var qStatusLength;
-        var qStatusShape;
         // Copy configuration items
         this.controlTopic = config.controlTopic.toLowerCase();
         this.openCmd = config.openCmd.toLowerCase();
@@ -36,12 +33,18 @@ module.exports = function(RED) {
         this.defaultState = config.defaultState.toLowerCase();
         this.maxQueueLength = config.maxQueueLength;
         this.keepNewest = config.keepNewest;
+        this.persist = config.persist;
         // Save "this" object
         var node = this;
-        // Gate status & max queue size
-        var state = node.defaultState;
-        var queue = [];
         var context = node.context();
+        var persist = node.persist;
+        var state = context.get('state');
+        var queue = context.get('queue');
+        if (!persist || typeof state === 'undefined') {
+            state = node.defaultState;
+            queue = [];
+        }
+        // Gate status & max queue size
         context.set('state',state);
         context.set('queue',queue);
         if (node.maxQueueLength <= 0) {
@@ -56,7 +59,10 @@ module.exports = function(RED) {
                 node.status(closedStatus);
                 break;
             case 'queueing':
-                node.status(queueingStatus);
+//                node.status(queueingStatus);
+                queueStatus.text = 'queuing: ' + queue.length;
+                queueStatus.shape = (queue.length < node.maxQueueLength) ? 'ring':'dot';
+                node.status(queueStatus);
                 break;
             default:
                 node.error('Invalid state');
@@ -104,7 +110,7 @@ module.exports = function(RED) {
                         node.send([queue]);
                     case node.resetCmd:
                         queue = [];
-                        node.status(queueingStatus);
+                        node.status(queueStatus);
                         break;
                     case node.defaultCmd:
                     // reset then default
@@ -149,14 +155,9 @@ module.exports = function(RED) {
                             queue.shift();
                             }
                         }
-                        if (queue.length < node.maxQueueLength) {
-                            qStatusShape = 'ring';
-                            } else {
-                            qStatusShape = 'dot';
-                            }
-                        qStatusLength = queue.length;
-                        qStatusText = 'queuing: ' + qStatusLength;
-                        node.status({fill:'yellow',shape:qStatusShape,text:qStatusText});
+                        queueStatus.text = 'queuing: ' + queue.length;
+                        queueStatus.shape = (queue.length < node.maxQueueLength) ? 'ring':'dot';
+                        node.status(queueStatus);
                         break;
                     default:
                         node.error('Invalid state');

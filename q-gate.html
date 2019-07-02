@@ -31,7 +31,8 @@
             flushCmd: {value:"flush"},
             resetCmd: {value:"reset"},
             maxQueueLength: {value:"100"},
-            keepNewest: {value:false}
+            keepNewest: {value:false},
+            persist: {value:false}
         },
         inputs:1,
         outputs:1,
@@ -52,7 +53,7 @@
          <label for="node-input-controlTopic"><i class="fa fa-cog"></i> Control Topic</label>
          <input type="text" id="node-input-controlTopic" placeholder="control">
      </div>
-<!-- defaultState -->   
+<!-- defaultState and persist-->   
     <div class="form-row">
         <label for="node-input-func"><i class="fa fa-refresh"></i> Default State</label>
         <select type="text" id="node-input-defaultState" style="width:20%">
@@ -60,6 +61,10 @@
             <option value="closed"> closed</option>
             <option value="queueing"> queueing</option>
         </select>
+        <span>&emsp;</span>
+        <label for="node-input-persist" style="width:25%; display:inline">
+            <input type="checkbox" id="node-input-persist" style="display:inline-block; width:15px; vertical-align:baseline;">
+        <span>Restore from saved state</span></label>
     </div>
     <br/>
 <!-- commands -->
@@ -68,17 +73,17 @@
     <div>Gating</div>
 <!-- openCmd & toggleCmd--> 
     <div class="form-row">
-      <label for="node-input-openCmd"><i class="fa fa-circle-o"></i> Open</label>
-      <input type="text" id="node-input-openCmd" placeholder="open" style="width:20%;">
-      <span style="color:transparent">xxxxxx</span>
-      <label for="node-input-toggleCmd"><i class="fa fa-arrows-v"></i> Toggle </label>
-      <input type="text" id="node-input-toggleCmd" placeholder="toggle" style="width:20%;">
+        <label for="node-input-openCmd"><i class="fa fa-circle-o"></i> Open</label>
+        <input type="text" id="node-input-openCmd" placeholder="open" style="width:20%;">
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
+        <label for="node-input-toggleCmd"><i class="fa fa-arrows-v"></i> Toggle </label>
+        <input type="text" id="node-input-toggleCmd" placeholder="toggle" style="width:20%;">
     </div>
 <!-- closeCmd & defaultCmd--> 
     <div class="form-row">
          <label for="node-input-closeCmd"><i class="fa fa-circle"></i> Close</label>
          <input type="text" id="node-input-closeCmd" placeholder="close" style="width:20%;">
-         <span style="color:transparent">xxxxxx</span>
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
          <label for="node-input-defaultCmd"><i class="fa fa-dot-circle-o"></i> Default</label>
          <input type="text" id="node-input-defaultCmd" placeholder="default" style="width:20%">
     </div>
@@ -86,26 +91,26 @@
     <div>Queuing</div>
 <!-- queueCmd & triggerCmd--> 
     <div class="form-row">
-         <label for="node-input-queueCmd"><i class="fa fa-pause"></i> Queue</label>
-         <input type="text" id="node-input-queueCmd" placeholder="queue" style="width:20%">
-         <span style="color:transparent">xxxxxx</span>
-         <label for="node-input-triggerCmd"><i class="fa fa-step-forward"></i> Trigger</label>
-         <input type="text" id="node-input-triggerCmd" placeholder="trigger" style="width:20%">
+        <label for="node-input-queueCmd"><i class="fa fa-pause"></i> Queue</label>
+        <input type="text" id="node-input-queueCmd" placeholder="queue" style="width:20%">
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
+        <label for="node-input-triggerCmd"><i class="fa fa-step-forward"></i> Trigger</label>
+        <input type="text" id="node-input-triggerCmd" placeholder="trigger" style="width:20%">
     </div>
 <!-- flushCmd & resetCmd --> 
     <div class="form-row">
-         <label for="node-input-flushCmd"><i class="fa fa-forward"></i> Flush</label>
-         <input type="text" id="node-input-flushCmd" placeholder="flush" style="width:20%">
-         <span style="color:transparent">xxxxxx</span>
-         <label for="node-input-resetCmd"><i class="fa fa-eject"></i> Reset</label>
-         <input type="text" id="node-input-resetCmd" placeholder="reset" style="width:20%">
+        <label for="node-input-flushCmd"><i class="fa fa-forward"></i> Flush</label>
+        <input type="text" id="node-input-flushCmd" placeholder="flush" style="width:20%">
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
+        <label for="node-input-resetCmd"><i class="fa fa-eject"></i> Reset</label>
+        <input type="text" id="node-input-resetCmd" placeholder="reset" style="width:20%">
     </div>
 <!-- max queue length & keep newest -->
     <div class="form-row">
         <label for="node-input-maxQueueLength"><i class="fa fa-exclamation-triangle"></i> 
         Max queue (< 1, no limit)</label>
         <input type="number" id="node-input-maxQueueLength" placeholder="100" style="width:20%">
-        <span style="color:transparent">xxxxxx</span>
+        <span>&emsp;</span>
         <label for="node-input-keepNewest" style="width:25%; display:inline"></label>
         <label for="node-input-keepNewest" style="width:25%; display:inline">
         <input type="checkbox" id="node-input-keepNewest" style="display:inline-block; width:15px; vertical-align:baseline;">
@@ -133,4 +138,9 @@
     <code>flush</code> and <code>reset</code>. </p>
     <p>When first deployed or after a <code>default</code> command, the gate is in the 
     state defined by <code>Default State</code>.<p>
+    <p>After a re-deploy or Node-RED restart, the node will enter the <code>Default State
+    </code> unless the user has selected the <code>Restore from saved state</code> option
+    (checkbox) in the edit dialog and enabled a persistent form of context storage in the Node-RED
+    <code>settings.js</code> file. In that case, the node will attempt to enter the state it was in prior
+    to the re-deploy or restart.</p>
 </script>

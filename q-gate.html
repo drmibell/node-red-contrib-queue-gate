@@ -12,6 +12,8 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
+  
+  modified by Simon Walters 31Jul19 to choose what states toggle goes between - open/closed or open/queueing
 -->
 
 <script type="text/javascript">
@@ -31,7 +33,8 @@
             flushCmd: {value:"flush"},
             resetCmd: {value:"reset"},
             maxQueueLength: {value:"100"},
-            keepNewest: {value:false}
+            keepNewest: {value:false},
+            toggleMode: {value:"open_closed"}
         },
         inputs:1,
         outputs:1,
@@ -112,6 +115,16 @@
         <span>Keep newest messages</span></label>
     </div>
     <br/>
+    <!-- Toggle action -->
+    <div class="form-row">
+        <label for="node-input-toggleMode"><i class="fa fa-refresh"></i> Toggle Mode</label>
+        <select type="text" id="node-input-toggleMode" style="width:50%">
+            <option value="open_closed"> toggle between open and closed</option>
+            <option value="open_queueing"> toggle between open and queueing</option>
+        </select>
+    </div>
+    <br/>
+
     <!-- Name -->  
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>

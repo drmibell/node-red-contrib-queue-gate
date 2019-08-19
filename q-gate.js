@@ -65,7 +65,7 @@ module.exports = function(RED) {
         node.on('input', function(msg) {
             var state = context.get('state') || node.defaultState;
             var queue = context.get('queue') || []
-            if (msg.topic !== undefined && msg.topic.toLowerCase() === node.controlTopic) {
+            if (typeof msg.topic === 'string' && msg.topic.toLowerCase() === node.controlTopic) {
             // Change state
                 switch (msg.payload.toLowerCase()) {
                     case node.openCmd:

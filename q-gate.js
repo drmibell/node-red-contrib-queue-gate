@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 M. I. Bell
+ * Copyright 2017-2019 M. I. Bell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * modified by Simon Walters 31Jul19 to select toggle behavior: open/closed or open/queueing
  **/
 module.exports = function(RED) {
     function QueueGateNode(config) {
@@ -25,6 +27,7 @@ module.exports = function(RED) {
         this.openCmd = config.openCmd.toLowerCase();
         this.closeCmd = config.closeCmd.toLowerCase();
         this.toggleCmd = config.toggleCmd.toLowerCase();
+        this.qToggle = config.qToggle
         this.queueCmd = config.queueCmd.toLowerCase();
         this.triggerCmd = config.triggerCmd.toLowerCase();
         this.flushCmd = config.flushCmd.toLowerCase();
@@ -89,13 +92,26 @@ module.exports = function(RED) {
                         state = 'queueing';
                         break;
                     case node.toggleCmd:
-                        switch (state) {
-                            case 'open':
-                                state = 'closed';
-                                break;
-                            case 'closed':
-                                state = 'open';
-                                break;
+                        if (!node.qToggle) {
+                            switch (state) {
+                                case 'open':
+                                    state = 'closed';
+                                    break;
+                                case 'closed':
+                                    state = 'open';
+                                    break;
+                            }
+                        } else {
+                            switch (state) {
+                                case 'open':
+                                    state = 'queueing';
+                                    break;
+                                case 'queueing':
+                                    node.send([queue]);
+                                    queue =[];
+                                    state = 'open';
+                                    break;
+                            }
                         }
                         break;
                     case node.triggerCmd:

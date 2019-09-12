@@ -19,12 +19,17 @@ Messages with the user-defined topic `Control Topic` (set when the node is deplo
 
 Control messages can have values representing commands that change the state of the gate: `open`, `close`, `toggle`, `queue`, or `default`. Messages that control the queue are `trigger`, `flush`, and `reset`. The (case-insensitive) strings representing these commands are set by the user when the node is deployed. If a control message is received but not recognized, there is no output or change of state, and the node reports an error.
 
-When first deployed or after a `default` command, the gate is in the user-selected state defined by `Default State`. When a valid control message is received, the gate performs one of the following actions:
+When first deployed or after a `default` command, the gate is in the user-selected state defined by `Default State`. (See below regarding persistence.) When a valid control message is received, the gate performs one of the following actions:
 
 <img  src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/images/actions.png?raw=true">
 where flush = send all queued messages; reset = delete all queued messages; dequeue = send oldest message in queue.
 
+
 The specified behaviors of the `queueing` state (flush before opening, reset before closing, and reset before default) can be reversed by sending a sequence of commands, i.e., [reset, open], [flush, close] or [flush, default].
+
+Since version 1.3.0, the effect of the `toggle` command depends on the option selected using the `Toggle between open and queueing` checkbox. In the default (unchecked) case, the node toggles between the `open` and `closed` states. When the option is selected, the node toggles between the `open` and `queueing` states, with the queue being flushed each time the `open` state is entered. (Thanks to Simon Walters for suggesting and helping to implement this feature.)
+
+Users should be aware that in each of the three states the node will not respond to one or more types of control message (indicated by `nop` in table). This should be taken into account when selecting the `Default State` and designing flows.
 
 ## Node status
 The state of the gate is indicated by a status object: 
@@ -34,7 +39,11 @@ The state of the gate is indicated by a status object:
 where n = the number of messages in the queue.
 
 ## State persistence (since version 1.2.0)
+<<<<<<< Updated upstream
 By default, the node enters the `Default State` on startup, either when first deployed in the editor, re-deployed as part of a modified flow or entire workspace, or when Node-RED is restarted by the user or by a system service. The user can, however, select the `Restore from saved state` option (checkbox) in the edit dialog. Then, if a persistent form of context storage has been enabled in the Node-RED `settings.js` file, the node will attempt to enter the state last saved in the node context and will use the `Default State` only if no saved state is available.
+=======
+By default, the node enters the `Default State` on startup, either when first deployed in the editor, re-deployed as part of a modified flow or entire workspace, or when Node-RED is restarted by the user or by a system service. If the `Default State` is `queueing`, the message queue will be empty. The user can, however, select the `Restore from saved state` option (checkbox) in the edit dialog. Then, if a persistent form of context storage has been enabled in the Node-RED `settings.js` file, the node will attempt to enter the state last saved in the node context and will use the `Default State` only if no saved state is available. If the saved state is `queueing`, the message queue will be also be restored.
+>>>>>>> Stashed changes
 
 ## Examples
 ### Basic Operation
@@ -52,3 +61,7 @@ This flow, as noted above, saves the most recent message in the queue and releas
 ```
 <img src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/screenshots/q-gate-keep-newest.png?raw=true"/>
 
+## Author
+[Mike Bell](https://www.linkedin.com/in/drmichaelbell/) (drmike)
+## Contributors
+[Simon Walters](https://github.com/cymplecy) (cymplecy)

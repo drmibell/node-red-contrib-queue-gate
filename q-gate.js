@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 M. I. Bell
+ * Copyright 2017-2019 M. I. Bell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,8 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- 
- * modified by Simon Walters 31Jul19 to choose what states toggle goes between - open/closed or open/queueing
+ *
+ * modified by Simon Walters 31Jul19 to select toggle behavior: open/closed or open/queueing
  **/
 module.exports = function(RED) {
     function QueueGateNode(config) {
@@ -30,8 +30,7 @@ module.exports = function(RED) {
         this.openCmd = config.openCmd.toLowerCase();
         this.closeCmd = config.closeCmd.toLowerCase();
         this.toggleCmd = config.toggleCmd.toLowerCase();
-        this.toggleMode = config.toggleMode.toLowerCase();
-        if (this.toggleMode === undefined) { this.toggleMode = "open_closed"; }
+        this.qToggle = config.qToggle
         this.queueCmd = config.queueCmd.toLowerCase();
         this.triggerCmd = config.triggerCmd.toLowerCase();
         this.flushCmd = config.flushCmd.toLowerCase();
@@ -87,8 +86,7 @@ module.exports = function(RED) {
                         state = 'queueing';
                         break;
                     case node.toggleCmd:
-                        node.warn(node.toggleMode);
-                        if (node.toggleMode == "open_closed") {
+                        if (!node.qToggle) {
                             switch (state) {
                                 case 'open':
                                     state = 'closed';

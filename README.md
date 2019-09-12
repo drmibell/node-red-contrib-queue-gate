@@ -39,11 +39,7 @@ The state of the gate is indicated by a status object:
 where n = the number of messages in the queue.
 
 ## State persistence (since version 1.2.0)
-<<<<<<< Updated upstream
-By default, the node enters the `Default State` on startup, either when first deployed in the editor, re-deployed as part of a modified flow or entire workspace, or when Node-RED is restarted by the user or by a system service. The user can, however, select the `Restore from saved state` option (checkbox) in the edit dialog. Then, if a persistent form of context storage has been enabled in the Node-RED `settings.js` file, the node will attempt to enter the state last saved in the node context and will use the `Default State` only if no saved state is available.
-=======
 By default, the node enters the `Default State` on startup, either when first deployed in the editor, re-deployed as part of a modified flow or entire workspace, or when Node-RED is restarted by the user or by a system service. If the `Default State` is `queueing`, the message queue will be empty. The user can, however, select the `Restore from saved state` option (checkbox) in the edit dialog. Then, if a persistent form of context storage has been enabled in the Node-RED `settings.js` file, the node will attempt to enter the state last saved in the node context and will use the `Default State` only if no saved state is available. If the saved state is `queueing`, the message queue will be also be restored.
->>>>>>> Stashed changes
 
 ## Examples
 ### Basic Operation

@@ -34,7 +34,8 @@
             resetCmd: {value:"reset"},
             maxQueueLength: {value:"100"},
             keepNewest: {value:false},
-            qToggle: {value:false}
+            qToggle: {value:false},
+            persist: {value:false}
         },
         inputs:1,
         outputs:1,
@@ -63,6 +64,10 @@
             <option value="closed"> closed</option>
             <option value="queueing"> queueing</option>
         </select>
+        <span>&emsp;</span>
+        <label for="node-input-persist" style="width:25%; display:inline">
+            <input type="checkbox" id="node-input-persist" style="display:inline-block; width:15px; vertical-align:baseline;">
+        <span>Restore from saved state</span></label>
     </div>
     <br/>
 <!-- commands -->

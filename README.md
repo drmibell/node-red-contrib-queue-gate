@@ -3,7 +3,7 @@ A Node-RED node for controlling message flow, with queueing capability
 
 ## Install
 
-Either use the Manage Palette option in the Node-RED Editor menu, or run the following command in your Node-RED user directory (typically `~/.node-red`):
+Use the Node-RED `Manage Palette` command or run the following in your Node-RED user directory (typically `~/.node-red`):
 
     npm install node-red-contrib-queue-gate
 
@@ -13,7 +13,7 @@ The `q-gate` node is similar to the `gate` node published as [node-red-contrib-s
 
 The node will transmit the input message to its output when in the `open` state and block it when `closed`. In the `queueing` state, the input message is added to the end of the message queue, provided space is available.  Messages in the queue can be released (in the order received) either singly or the entire queue at once.
 
-The user can limit the size of the queue to prevent memory problems. Messages arriving when the queue is full are discarded by default, so that the queue contains the oldest messages. However, the user can select the `Keep newest messages` checkbox to have new messages added to the queue (at the tail), while discarding the oldest message (from the head), so that the queue contains the most recent messages. This feature makes it possible to retain only the latest message and deliver it on request, as shown in the example below.
+The user can limit the size of the queue to prevent memory problems. Messages arriving when the queue is full are discarded by default, so that the queue contains the oldest messages. Since version 1.1.0, however, the user can select the `Keep newest messages` checkbox to have new messages added to the queue (at the tail), while discarding the oldest message (from the head), so that the queue contains the most recent messages. This feature makes it possible to retain only the latest message and deliver it on request, as shown in the example below.
 
 Messages with the user-defined topic `Control Topic` (set when the node is deployed) are not passed through but are used to control the state of the gate or the queue.
 
@@ -33,6 +33,9 @@ The state of the gate is indicated by a status object:
 
 where n = the number of messages in the queue.
 
+## State persistence (since version 1.2.0)
+By default, the node enters the `Default State` on startup, either when first deployed in the editor, re-deployed as part of a modified flow or entire workspace, or when Node-RED is restarted by the user or by a system service. The user can, however, select the `Restore from saved state` option (checkbox) in the edit dialog. Then, if a persistent form of context storage has been enabled in the Node-RED `settings.js` file, the node will attempt to enter the state last saved in the node context and will use the `Default State` only if no saved state is available.
+
 ## Examples
 ### Basic Operation
 This flow demonstrates the basic operation of the `q-gate` node and the commands that can be used to change its state or manage the queue.
@@ -41,7 +44,7 @@ This flow demonstrates the basic operation of the `q-gate` node and the commands
 ```
 <img src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/screenshots/q-gate-demo.png?raw=true"/>
 
-### Save Most Recent Message
+### Save Most Recent Message (since version 1.1.0)
 This flow, as noted above, saves the most recent message in the queue and releases it when a `trigger`, `flush`, or `open` command is received. (Note that if the `open` command is used, the gate will remain open until a `queue` or `default` command is received to restore the original mode of operation.) The `q-gate` is configured with `Default State = queueing`, `Maximum Queue Length = 1`, and `Keep Newest Messages = true`.
 
 ```

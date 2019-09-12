@@ -12,6 +12,8 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
+  
+  modified by Simon Walters 31Jul19 to select toggle behavior: open/closed or open/queueing
 -->
 
 <script type="text/javascript">
@@ -32,6 +34,7 @@
             resetCmd: {value:"reset"},
             maxQueueLength: {value:"100"},
             keepNewest: {value:false},
+            qToggle: {value:false},
             persist: {value:false}
         },
         inputs:1,
@@ -50,10 +53,10 @@
 <script type="text/x-red" data-template-name="q-gate">
 <!-- controlTopic --> 
     <div class="form-row">
-         <label for="node-input-controlTopic"><i class="fa fa-cog"></i> Control Topic</label>
-         <input type="text" id="node-input-controlTopic" placeholder="control">
-     </div>
-<!-- defaultState and persist-->   
+        <label for="node-input-controlTopic"><i class="fa fa-cog"></i> Control Topic</label>
+        <input type="text" id="node-input-controlTopic" placeholder="control">
+    </div>
+<!-- defaultState -->   
     <div class="form-row">
         <label for="node-input-func"><i class="fa fa-refresh"></i> Default State</label>
         <select type="text" id="node-input-defaultState" style="width:20%">
@@ -68,10 +71,10 @@
     </div>
     <br/>
 <!-- commands -->
-    <div>Commands (case insensitive):</div>
+    <div><b>Commands (case insensitive):</b></div>
     <br/>
-    <div>Gating</div>
-<!-- openCmd & toggleCmd--> 
+    <div><b>Gating</b></div>
+<!-- openCmd & toggleCmd --> 
     <div class="form-row">
         <label for="node-input-openCmd"><i class="fa fa-circle-o"></i> Open</label>
         <input type="text" id="node-input-openCmd" placeholder="open" style="width:20%;">
@@ -79,17 +82,17 @@
         <label for="node-input-toggleCmd"><i class="fa fa-arrows-v"></i> Toggle </label>
         <input type="text" id="node-input-toggleCmd" placeholder="toggle" style="width:20%;">
     </div>
-<!-- closeCmd & defaultCmd--> 
+<!-- closeCmd & defaultCmd --> 
     <div class="form-row">
-         <label for="node-input-closeCmd"><i class="fa fa-circle"></i> Close</label>
-         <input type="text" id="node-input-closeCmd" placeholder="close" style="width:20%;">
+        <label for="node-input-closeCmd"><i class="fa fa-circle"></i> Close</label>
+        <input type="text" id="node-input-closeCmd" placeholder="close" style="width:20%;">
         <span>&emsp;&emsp;&emsp;&emsp;</span>
-         <label for="node-input-defaultCmd"><i class="fa fa-dot-circle-o"></i> Default</label>
-         <input type="text" id="node-input-defaultCmd" placeholder="default" style="width:20%">
+        <label for="node-input-defaultCmd"><i class="fa fa-dot-circle-o"></i> Default</label>
+        <input type="text" id="node-input-defaultCmd" placeholder="default" style="width:20%">
     </div>
     <br/>
-    <div>Queuing</div>
-<!-- queueCmd & triggerCmd--> 
+    <div><b>Queuing</b></div>
+<!-- queueCmd & triggerCmd --> 
     <div class="form-row">
         <label for="node-input-queueCmd"><i class="fa fa-pause"></i> Queue</label>
         <input type="text" id="node-input-queueCmd" placeholder="queue" style="width:20%">
@@ -110,20 +113,25 @@
         <label for="node-input-maxQueueLength"><i class="fa fa-exclamation-triangle"></i> 
         Max queue (< 1, no limit)</label>
         <input type="number" id="node-input-maxQueueLength" placeholder="100" style="width:20%">
-        <span>&emsp;</span>
-        <label for="node-input-keepNewest" style="width:25%; display:inline"></label>
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
         <label for="node-input-keepNewest" style="width:25%; display:inline">
         <input type="checkbox" id="node-input-keepNewest" style="display:inline-block; width:15px; vertical-align:baseline;">
         <span>Keep newest messages</span></label>
     </div>
+<!-- Toggle action -->
+    <div class="form-row">
+        <label for="node-input-qToggle" style="width:25%; display:inline">
+        <input type="checkbox" id="node-input-qToggle" style="display:inline-block; width:15px; vertical-align:baseline;">
+        <span>Toggle between open and queueing (default: between open and closed)</span></label>
+    </div>
     <br/>
-    <!-- Name -->  
+<!-- Name -->  
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
-
 </script>
+
 <!-- help text -->
 <script type="text/x-red" data-help-name="q-gate">
     <p>Transmits the input message when in the <code>open</code> state, blocks it when
@@ -135,12 +143,15 @@
     the state of the gate or manage the queue. Control messages setting the state are 
     <code>open</code>, <code>close</code>, <code>toggle</code>, <code>queue</code>, and 
     <code>default</code>. Those managing the queue are <code>trigger</code>, 
-    <code>flush</code> and <code>reset</code>. </p>
+    <code>flush</code> and <code>reset</code>. The effects of these commands and the status 
+    object displayed by the node are described on <a 
+    href="https://github.com/drmibell/node-red-contrib-queue-gate">Github</a></p>
     <p>When first deployed or after a <code>default</code> command, the gate is in the 
     state defined by <code>Default State</code>.<p>
     <p>After a re-deploy or Node-RED restart, the node will enter the <code>Default State
-    </code> unless the user has selected the <code>Restore from saved state</code> option
+    </code>, unless the user has selected the <code>Restore from saved state</code> option
     (checkbox) in the edit dialog and enabled a persistent form of context storage in the Node-RED
     <code>settings.js</code> file. In that case, the node will attempt to enter the state it was in prior
-    to the re-deploy or restart.</p>
+    to the re-deploy or restart and also restore the message queue.</p>
+
 </script>

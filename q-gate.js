@@ -122,6 +122,22 @@ module.exports = function(RED) {
                             }
                         }
                         break;
+                    case "peek":
+                        if (state === 'queueing') {
+                        // Send oldest but leave on queue
+                        if (queue.length > 0) {
+                            node.send(queue[0]);
+                            }
+                        }
+                        break;
+                    case "drop":
+                        if (state === 'queueing') {
+                        // Remove oldest from queue but don't send anything
+                        if (queue.length > 0) {
+                            queue.shift();
+                            }
+                        }
+                        break;
                     case node.flushCmd:
                         node.send([queue]);
                     case node.resetCmd:
@@ -132,6 +148,9 @@ module.exports = function(RED) {
                     // reset then default
                         queue = [];
                         state = node.defaultState;
+                        break;
+                    case "status":
+                        // just show status, so do nothing here
                         break;
                     default:
                         node.error('Invalid command');

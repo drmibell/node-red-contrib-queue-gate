@@ -32,6 +32,9 @@
             triggerCmd: {value:"trigger"},
             flushCmd: {value:"flush"},
             resetCmd: {value:"reset"},
+            peekCmd: {value:"peek"},
+            dropCmd: {value:"drop"},
+            statusCmd: {value:"status"},
             maxQueueLength: {value:"100"},
             keepNewest: {value:false},
             qToggle: {value:false},
@@ -108,6 +111,19 @@
         <label for="node-input-resetCmd"><i class="fa fa-eject"></i> Reset</label>
         <input type="text" id="node-input-resetCmd" placeholder="reset" style="width:20%">
     </div>
+<!-- peekCmd & dropCmd --> 
+    <div class="form-row">
+        <label for="node-input-peekCmd"><i class="fa fa-forward"></i> Peek</label>
+        <input type="text" id="node-input-peekCmd" placeholder="peek" style="width:20%">
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
+        <label for="node-input-dropCmd"><i class="fa fa-eject"></i> Drop</label>
+        <input type="text" id="node-input-dropCmd" placeholder="drop" style="width:20%">
+    </div>
+<!-- statusCmd --> 
+    <div class="form-row">
+        <label for="node-input-statusCmd"><i class="fa fa-forward"></i> Status</label>
+        <input type="text" id="node-input-statusCmd" placeholder="status" style="width:20%">
+    </div>
 <!-- max queue length & keep newest -->
     <div class="form-row">
         <label for="node-input-maxQueueLength"><i class="fa fa-exclamation-triangle"></i> 
@@ -143,7 +159,8 @@
     the state of the gate or manage the queue. Control messages setting the state are 
     <code>open</code>, <code>close</code>, <code>toggle</code>, <code>queue</code>, and 
     <code>default</code>. Those managing the queue are <code>trigger</code>, 
-    <code>flush</code> and <code>reset</code>. The effects of these commands and the status 
+    <code>flush</code>, <code>peek</code>, <code>drop</code>, <code>status</code> and <code>reset</code>. 
+    The effects of these commands and the status 
     object displayed by the node are described on <a 
     href="https://github.com/drmibell/node-red-contrib-queue-gate">Github</a></p>
     <p>When first deployed or after a <code>default</code> command, the gate is in the 

@@ -32,6 +32,9 @@ module.exports = function(RED) {
         this.triggerCmd = config.triggerCmd.toLowerCase();
         this.flushCmd = config.flushCmd.toLowerCase();
         this.resetCmd = config.resetCmd.toLowerCase();
+        this.peekCmd = (config.peekCmd || "peek").toLowerCase();
+        this.dropCmd = (config.dropCmd || "drop").toLowerCase();
+        this.statusCmd = (config.statusCmd || "status").toLowerCase();
         this.defaultCmd = config.defaultCmd.toLowerCase();
         this.defaultState = config.defaultState.toLowerCase();
         this.maxQueueLength = config.maxQueueLength;
@@ -122,7 +125,7 @@ module.exports = function(RED) {
                             }
                         }
                         break;
-                    case "peek":
+                    case node.peekCmd:
                         if (state === 'queueing') {
                         // Send oldest but leave on queue
                         if (queue.length > 0) {
@@ -130,13 +133,16 @@ module.exports = function(RED) {
                             }
                         }
                         break;
-                    case "drop":
+                    case node.dropCmd:
                         if (state === 'queueing') {
                         // Remove oldest from queue but don't send anything
                         if (queue.length > 0) {
                             queue.shift();
                             }
                         }
+                        break;
+                    case node.statusCmd:
+                        // just show status, so do nothing here
                         break;
                     case node.flushCmd:
                         node.send([queue]);
@@ -148,9 +154,6 @@ module.exports = function(RED) {
                     // reset then default
                         queue = [];
                         state = node.defaultState;
-                        break;
-                    case "status":
-                        // just show status, so do nothing here
                         break;
                     default:
                         node.error('Invalid command');

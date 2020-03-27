@@ -17,7 +17,13 @@ The user can limit the size of the queue to prevent memory problems. Messages ar
 
 Messages with the user-defined topic `Control Topic` (set when the node is deployed) are not passed through but are used to control the state of the gate or the queue.
 
-Control messages can have values representing commands that change the state of the gate: `open`, `close`, `toggle`, `queue`, or `default`. Messages that control the queue are `trigger`, `flush`, and `reset`. The (case-insensitive) strings representing these commands are set by the user when the node is deployed. If a control message is received but not recognized, there is no output or change of state, and the node reports an error.
+Control messages can have values representing commands that change the state of the gate: `open`, `close`, `toggle`, `queue`, or `default`. Messages that control or monitor the queue are `trigger`, `flush`, `peek`, `drop`, `status`, and `reset`. The (case-insensitive) strings representing these commands are set by the user when the node is deployed. If a control message is received but not recognized, there is no output or change of state, and the node reports an error.
+
+The `peek` command sends the oldest message but does not remove it from the queue, the `drop` command removes the oldest message from the queue 
+without sending it.  The two may be used together to get the oldest message, perform some action, and then remove it from the queue only when it has 
+been successfully serviced.
+
+The `status` command forces the status to be refreshed. This can be used in conjunction with a Status node to get the current message count, for example.
 
 When first deployed or after a `default` command, the gate is in the user-selected state defined by `Default State`. (See below regarding persistence.) When a valid control message is received, the gate performs one of the following actions:
 

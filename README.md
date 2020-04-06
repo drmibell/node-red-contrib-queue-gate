@@ -11,13 +11,19 @@ Use the Node-RED `Manage Palette` command or run the following in your Node-RED 
 
 The `q-gate` node is similar to the `gate` node published as [node-red-contrib-simple-gate](https://flows.nodered.org/node/node-red-contrib-simple-gate) but with the added capability of queueing messages and releasing them when triggered. 
 
-The node will transmit the input message to its output when in the `open` state and block it when `closed`. In the `queueing` state, the input message is added to the end of the message queue, provided space is available.  Messages in the queue can be released (in the order received) either singly or the entire queue at once.
+The node will transmit the input message to its output when in the `open` state and block it when `closed`. In the `queueing` state, the input message is added to the end of the message queue, provided space is available.  Messages in the queue can be released (in the order received) either singly (`trigger`) or the entire queue at once (`flush`). Alternatively the oldest message in the queue can be sent (`peek`) without releasing it or the oldest message can be removed from the queue without sending it on (`drop`).
 
 The user can limit the size of the queue to prevent memory problems. Messages arriving when the queue is full are discarded by default, so that the queue contains the oldest messages. Since version 1.1.0, however, the user can select the `Keep newest messages` checkbox to have new messages added to the queue (at the tail), while discarding the oldest message (from the head), so that the queue contains the most recent messages. This feature makes it possible to retain only the latest message and deliver it on request, as shown in the example below.
 
 Messages with the user-defined topic `Control Topic` (set when the node is deployed) are not passed through but are used to control the state of the gate or the queue.
 
-Control messages can have values representing commands that change the state of the gate: `open`, `close`, `toggle`, `queue`, or `default`. Messages that control the queue are `trigger`, `flush`, and `reset`. The (case-insensitive) strings representing these commands are set by the user when the node is deployed. If a control message is received but not recognized, there is no output or change of state, and the node reports an error.
+Control messages can have values representing commands that change the state of the gate: `open`, `close`, `toggle`, `queue`, or `default`. Messages that control or monitor the queue are `trigger`, `flush`, `peek`, `drop`, `status`, and `reset`. The (case-insensitive) strings representing these commands are set by the user when the node is deployed. If a control message is received but not recognized, there is no output or change of state, and the node reports an error.
+
+The `peek` command sends the oldest message but does not remove it from the queue, the `drop` command removes the oldest message from the queue 
+without sending it.  The two may be used together to get the oldest message, perform some action, and then remove it from the queue only when it has 
+been successfully serviced.
+
+The `status` command forces the status to be refreshed. This can be used in conjunction with a Status node to get the current message count, for example.
 
 When first deployed or after a `default` command, the gate is in the user-selected state defined by `Default State`. (See below regarding persistence.) When a valid control message is received, the gate performs one of the following actions:
 

@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * modified by Simon Walters 31Jul19 to select toggle behavior: open/closed or open/queueing
+ * Modified by Simon Walters 31 Jul 2019 to select toggle behavior: open/closed or open/queueing
+ * Modified by Colin Law 06 Apr 2020 to implement peek, drop, and status commands
  **/
 module.exports = function(RED) {
     function QueueGateNode(config) {
@@ -32,9 +33,9 @@ module.exports = function(RED) {
         this.triggerCmd = config.triggerCmd.toLowerCase();
         this.flushCmd = config.flushCmd.toLowerCase();
         this.resetCmd = config.resetCmd.toLowerCase();
-        this.peekCmd = (config.peekCmd || "peek").toLowerCase();
-        this.dropCmd = (config.dropCmd || "drop").toLowerCase();
-        this.statusCmd = (config.statusCmd || "status").toLowerCase();
+        this.peekCmd = config.peekCmd.toLowerCase();
+        this.dropCmd = config.dropCmd.toLowerCase();
+        this.statusCmd = config.statusCmd.toLowerCase();
         this.defaultCmd = config.defaultCmd.toLowerCase();
         this.defaultState = config.defaultState.toLowerCase();
         this.maxQueueLength = config.maxQueueLength;
@@ -65,7 +66,6 @@ module.exports = function(RED) {
                 node.status(closedStatus);
                 break;
             case 'queueing':
-//                node.status(queueingStatus);
                 queueStatus.text = 'queuing: ' + queue.length;
                 queueStatus.shape = (queue.length < node.maxQueueLength) ? 'ring':'dot';
                 node.status(queueStatus);
@@ -79,7 +79,7 @@ module.exports = function(RED) {
             var queue = context.get('queue') || []
             if (typeof msg.topic === 'string' && msg.topic.toLowerCase() === node.controlTopic) {
             // Change state
-                switch (msg.payload.toLowerCase()) {
+                switch (msg.payload.toString().toLowerCase()) {
                     case node.openCmd:
                     // flush then open
                         node.send([queue]);
@@ -148,7 +148,6 @@ module.exports = function(RED) {
                         node.send([queue]);
                     case node.resetCmd:
                         queue = [];
-                        node.status(queueStatus);
                         break;
                     case node.defaultCmd:
                     // reset then default
@@ -171,7 +170,9 @@ module.exports = function(RED) {
                         node.status(closedStatus);
                         break;
                     case 'queueing':
-                        node.status({fill:'yellow',shape:'ring',text:'queuing: ' + queue.length});
+                        queueStatus.text = 'queuing: ' + queue.length;
+                        queueStatus.shape = (queue.length < node.maxQueueLength) ? 'ring':'dot';
+                        node.status(queueStatus);
                     }
                 node.send(null);
             } else {

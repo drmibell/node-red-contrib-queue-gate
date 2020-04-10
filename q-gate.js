@@ -1,5 +1,5 @@
 /**
- * Copyright 2017-2019 M. I. Bell
+ * Copyright 2017-2020 M. I. Bell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,9 @@ module.exports = function(RED) {
         this.triggerCmd = config.triggerCmd.toLowerCase();
         this.flushCmd = config.flushCmd.toLowerCase();
         this.resetCmd = config.resetCmd.toLowerCase();
-        this.peekCmd = config.peekCmd.toLowerCase();
-        this.dropCmd = config.dropCmd.toLowerCase();
-        this.statusCmd = config.statusCmd.toLowerCase();
+        this.peekCmd = (config.peekCmd || "peek").toLowerCase();
+        this.dropCmd = (config.dropCmd || "drop").toLowerCase();
+        this.statusCmd = (config.statusCmd || "status").toLowerCase();
         this.defaultCmd = config.defaultCmd.toLowerCase();
         this.defaultState = config.defaultState.toLowerCase();
         this.maxQueueLength = config.maxQueueLength;

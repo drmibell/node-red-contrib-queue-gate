@@ -1,5 +1,5 @@
 <!--
-  Copyright 2018 M. I. Bell
+  Copyright 2018-20 M. I. Bell
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -13,8 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   
-  modified by Simon Walters 31Jul19 to select toggle behavior: open/closed or open/queueing
--->
+  Modified by Simon Walters 31 Jul 2019 to select toggle behavior: open/closed or open/queueing
+  Modified by Colin Law 06 Apr 2020 to implement peek, drop, and status commands
+ -->
 
 <script type="text/javascript">
     RED.nodes.registerType('q-gate',{
@@ -40,7 +41,9 @@
             qToggle: {value:false},
             persist: {value:false},
 //            contextStore: {value:"memory"}
-            storeName: {value:"default"}
+//            storeName: {value:"default"}
+            storeName: {value:RED.settings.context.default}
+
 
         },
         inputs:1,
@@ -55,20 +58,11 @@
         },
         oneditprepare: function() {
             var node = this
-//            console.log(typeof listTemp)  // debug
-//            console.log(listTemp) // debug
-//            let storeList = ["memory1","localfilesystem1","other"] // debug
-            let storeList = RED.settings.context.stores    // debug
-//            let storeList = ["memory","file","other"]   // debug
-//            console.log(storeList)    // debug
-            storeList.forEach(add)
+            RED.settings.context.stores.forEach(add)
             function add(item){
-//                console.log(item)     // debug
-//                $('#node-input-contextStore').append(`<option value="${item}">${item}</option>`) // debug
-//                $('#node-input-contextStore').val(node.contextStore) // debug
                 $('#node-input-storeName').append(`<option value="${item}">${item}</option>`)
-                $('#node-input-storeName').val(node.storeName)
             }
+            $('#node-input-storeName').val(node.storeName)
         }
     });
 </script>
@@ -91,9 +85,9 @@
         <label for="node-input-persist" style="width:25%; display:inline">
             <input type="checkbox" id="node-input-persist" style="display:inline-block; width:15px; vertical-align:baseline;">
         <span>Restore from state saved in</span></label>
-        <select type="text" id="node-input-storeName" style="width:22%"">
-            <option value = "default">default</option>
+        <select type="text" id="node-input-storeName" style="width:20%">
         </select>
+        <i class="fa fa-database"></i>
     </div>
     <br/>
 <!-- commands -->

@@ -1,5 +1,5 @@
 /**
- * Copyright 2017-2020 M. I. Bell
+ * Copyright 2018-2020 M. I. Bell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ module.exports = function(RED) {
         const openStatus = {fill:'green',shape:'dot',text:'open'};
         const closedStatus = {fill:'red',shape:'ring',text:'closed'};
         var queueStatus = {fill:'yellow'};
-        var maxQueueLength; // is this needed?
+        var maxQueueLength; // debug: is this needed?
         // Copy configuration items
         this.controlTopic = config.controlTopic.toLowerCase();
         this.openCmd = config.openCmd.toLowerCase();

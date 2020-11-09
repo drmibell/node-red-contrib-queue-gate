@@ -168,24 +168,21 @@
     <p>Transmits the input message when in the <code>open</code> state, blocks it when
     <code>closed</code>, and adds it to the message queue when in the <code>queueing</code> 
     state, provided the queue is not full. </p>
-    <p> When the queue is full, the user has the choice of keeping either the oldest or 
-    the newest messages.</p>
+    <p> When the queue is full, the user has the choice of keeping either the oldest or the newest messages.</p>
     <p>Messages with the topic <code>Control Topic</code> are control messages, which change 
     or display the state of the gate or manage the queue. Control messages setting the state are 
     <code>open</code>, <code>close</code>, <code>toggle</code>, <code>queue</code>, and 
     <code>default</code>. Those managing the queue are <code>trigger</code>, 
     <code>flush</code>, <code>peek</code>, <code>drop</code>, and <code>reset</code>. 
-    The  <code>status</code> command refreshes the node status. A control message payload may
+    The <code>status</code> command refreshes the node status. A control message payload may
     be a string, number, or boolean.
-    The effects of these commands and the status 
-    object displayed by the node are described on <a 
+    The effects of these commands and the status object displayed by the node are described on <a 
     href="https://github.com/drmibell/node-red-contrib-queue-gate">Github</a></p>
-    <p>When first deployed or after a <code>default</code> command, the gate is in the 
-    state defined by <code>Default State</code>.<p>
-    <p>After a re-deploy or Node-RED restart, the node will enter the <code>Default State
-    </code>, unless the user has selected the <code>Restore from saved state</code> option
-    (checkbox) in the edit dialog and enabled a persistent form of context storage in the Node-RED
-    <code>settings.js</code> file. In that case, the node will attempt to enter the state it was in prior
-    to the re-deploy or restart and also restore the message queue.</p>
+    <p>When first deployed or after a <code>default</code> command, the gate is in the state defined by <code>Default State</code>.<p>
+    <p>After a re-deploy or Node-RED restart, the node will enter the <code>Default State</code>,
+    unless the user has selected the <code>Restore from state saved in</code> option
+    (checkbox) in the edit dialog and has chosen a persistent form of context storage in the 
+    adjacent dropdown list. In that case, the node will enter the state it was in 
+    prior to the re-deploy or restart and will also restore the message queue.</p>
 
 </script>

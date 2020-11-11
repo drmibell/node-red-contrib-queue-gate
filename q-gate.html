@@ -1,5 +1,5 @@
 <!--
-  Copyright 2018 M. I. Bell
+  Copyright 2018-20 M. I. Bell
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -13,8 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   
-  modified by Simon Walters 31Jul19 to select toggle behavior: open/closed or open/queueing
--->
+  Modified by Simon Walters 31 Jul 2019 to select toggle behavior: open/closed or open/queueing
+  Modified by Colin Law 06 Apr 2020 to implement peek, drop, and status commands
+ -->
 
 <script type="text/javascript">
     RED.nodes.registerType('q-gate',{
@@ -38,7 +39,10 @@
             maxQueueLength: {value:"100"},
             keepNewest: {value:false},
             qToggle: {value:false},
-            persist: {value:false}
+            persist: {value:false},
+            storeName: {value:RED.settings.context.default}
+
+
         },
         inputs:1,
         outputs:1,
@@ -49,6 +53,14 @@
         },
         labelStyle: function() {
             return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function() {
+            var node = this
+            RED.settings.context.stores.forEach(add)
+            function add(item){
+                $('#node-input-storeName').append(`<option value="${item}">${item}</option>`)
+            }
+            $('#node-input-storeName').val(node.storeName)
         }
     });
 </script>
@@ -62,7 +74,7 @@
 <!-- defaultState -->   
     <div class="form-row">
         <label for="node-input-func"><i class="fa fa-refresh"></i> Default State</label>
-        <select type="text" id="node-input-defaultState" style="width:20%">
+        <select type="text" id="node-input-defaultState" style="width:16%">
             <option value="open"> open</option>
             <option value="closed"> closed</option>
             <option value="queueing"> queueing</option>
@@ -70,7 +82,10 @@
         <span>&emsp;</span>
         <label for="node-input-persist" style="width:25%; display:inline">
             <input type="checkbox" id="node-input-persist" style="display:inline-block; width:15px; vertical-align:baseline;">
-        <span>Restore from saved state</span></label>
+        <span>Restore from state saved in</span></label>
+        <select type="text" id="node-input-storeName" style="width:20%">
+        </select>
+        <i class="fa fa-database"></i>
     </div>
     <br/>
 <!-- commands -->
@@ -153,24 +168,21 @@
     <p>Transmits the input message when in the <code>open</code> state, blocks it when
     <code>closed</code>, and adds it to the message queue when in the <code>queueing</code> 
     state, provided the queue is not full. </p>
-    <p> When the queue is full, the user has the choice of keeping either the oldest or 
-    the newest messages.</p>
+    <p> When the queue is full, the user has the choice of keeping either the oldest or the newest messages.</p>
     <p>Messages with the topic <code>Control Topic</code> are control messages, which change 
     or display the state of the gate or manage the queue. Control messages setting the state are 
     <code>open</code>, <code>close</code>, <code>toggle</code>, <code>queue</code>, and 
     <code>default</code>. Those managing the queue are <code>trigger</code>, 
     <code>flush</code>, <code>peek</code>, <code>drop</code>, and <code>reset</code>. 
-    The  <code>status</code> command refreshes the node status. A control message payload may
+    The <code>status</code> command refreshes the node status. A control message payload may
     be a string, number, or boolean.
-    The effects of these commands and the status 
-    object displayed by the node are described on <a 
+    The effects of these commands and the status object displayed by the node are described on <a 
     href="https://github.com/drmibell/node-red-contrib-queue-gate">Github</a></p>
-    <p>When first deployed or after a <code>default</code> command, the gate is in the 
-    state defined by <code>Default State</code>.<p>
-    <p>After a re-deploy or Node-RED restart, the node will enter the <code>Default State
-    </code>, unless the user has selected the <code>Restore from saved state</code> option
-    (checkbox) in the edit dialog and enabled a persistent form of context storage in the Node-RED
-    <code>settings.js</code> file. In that case, the node will attempt to enter the state it was in prior
-    to the re-deploy or restart and also restore the message queue.</p>
+    <p>When first deployed or after a <code>default</code> command, the gate is in the state defined by <code>Default State</code>.<p>
+    <p>After a re-deploy or Node-RED restart, the node will enter the <code>Default State</code>,
+    unless the user has selected the <code>Restore from state saved in</code> option
+    (checkbox) in the edit dialog and has chosen a persistent form of context storage in the 
+    adjacent dropdown list. In that case, the node will enter the state it was in 
+    prior to the re-deploy or restart and will also restore the message queue.</p>
 
 </script>

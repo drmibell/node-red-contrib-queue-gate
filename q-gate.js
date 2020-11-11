@@ -1,5 +1,5 @@
 /**
- * Copyright 2017-2020 M. I. Bell
+ * Copyright 2018-2020 M. I. Bell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ module.exports = function(RED) {
         const openStatus = {fill:'green',shape:'dot',text:'open'};
         const closedStatus = {fill:'red',shape:'ring',text:'closed'};
         var queueStatus = {fill:'yellow'};
-        var maxQueueLength;
+        var maxQueueLength; // debug: is this needed?
         // Copy configuration items
         this.controlTopic = config.controlTopic.toLowerCase();
         this.openCmd = config.openCmd.toLowerCase();
@@ -41,19 +41,21 @@ module.exports = function(RED) {
         this.maxQueueLength = config.maxQueueLength;
         this.keepNewest = config.keepNewest;
         this.persist = config.persist;
+        this.storeName = config.storeName;
         // Save "this" object
         var node = this;
         var context = node.context();
         var persist = node.persist;
-        var state = context.get('state');
-        var queue = context.get('queue');
+        var storeName = node.storeName
+        var state = context.get('state',storeName);
+        var queue = context.get('queue',storeName);
         if (!persist || typeof state === 'undefined') {
             state = node.defaultState;
             queue = [];
         }
         // Gate status & max queue size
-        context.set('state',state);
-        context.set('queue',queue);
+        context.set('state',state,storeName);
+        context.set('queue',queue,storeName);
         if (node.maxQueueLength <= 0) {
             node.maxQueueLength = Infinity;
         }
@@ -75,8 +77,8 @@ module.exports = function(RED) {
         }
         // Process inputs
         node.on('input', function(msg) {
-            var state = context.get('state') || node.defaultState;
-            var queue = context.get('queue') || []
+            var state = context.get('state',storeName) || node.defaultState;
+            var queue = context.get('queue',storeName) || [];
             if (typeof msg.topic === 'string' && msg.topic.toLowerCase() === node.controlTopic) {
             // Change state
                 switch (msg.payload.toString().toLowerCase()) {
@@ -159,8 +161,8 @@ module.exports = function(RED) {
                         break;
                 }
                 // Save state
-                context.set('state',state);
-                context.set('queue',queue);
+                context.set('state',state,storeName);
+                context.set('queue',queue,storeName);
                 // Show status
                 switch (state) {
                     case 'open':

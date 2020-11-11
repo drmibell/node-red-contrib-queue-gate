@@ -131,7 +131,7 @@ module.exports = function(RED) {
                         if (state === 'queueing') {
                         // Send oldest but leave on queue
                         if (queue.length > 0) {
-                            node.send(queue[0]);
+                            node.send(RED.util.cloneMessage(queue[0]));
                             }
                         }
                         break;

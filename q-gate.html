@@ -41,8 +41,6 @@
             qToggle: {value:false},
             persist: {value:false},
             storeName: {value:RED.settings.context.default}
-
-
         },
         inputs:1,
         outputs:1,
@@ -61,6 +59,9 @@
                 $('#node-input-storeName').append(`<option value="${item}">${item}</option>`)
             }
             $('#node-input-storeName').val(node.storeName)
+            $("#node-input-persist").on("change", function(e) { 
+                $("#node-input-storeName").prop("disabled", !$(this).prop("checked"))
+            });
         }
     });
 </script>
@@ -73,7 +74,7 @@
     </div>
 <!-- defaultState -->   
     <div class="form-row">
-        <label for="node-input-func"><i class="fa fa-refresh"></i> Default State</label>
+        <label for="node-input-defaultState"><i class="fa fa-refresh"></i> Default State</label>
         <select type="text" id="node-input-defaultState" style="width:16%">
             <option value="open"> open</option>
             <option value="closed"> closed</option>
@@ -83,8 +84,7 @@
         <label for="node-input-persist" style="width:25%; display:inline">
             <input type="checkbox" id="node-input-persist" style="display:inline-block; width:15px; vertical-align:baseline;">
         <span>Restore from state saved in</span></label>
-        <select type="text" id="node-input-storeName" style="width:20%">
-        </select>
+        <select type="text" id="node-input-storeName" style="width:20%"> </select>
         <i class="fa fa-database"></i>
     </div>
     <br/>

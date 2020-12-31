@@ -157,7 +157,7 @@ module.exports = function(RED) {
                         state = node.defaultState;
                         break;
                     default:
-                        node.error('Invalid command');
+                        node.warn('Invalid command ignored');
                         break;
                 }
                 // Save state

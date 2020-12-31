@@ -54,11 +54,11 @@
         },
         oneditprepare: function() {
             var node = this
-            RED.settings.context.stores.forEach(add)
+            RED.settings.context.stores.forEach(add)    // list context stores
             function add(item){
                 $('#node-input-storeName').append(`<option value="${item}">${item}</option>`)
             }
-            $('#node-input-storeName').val(node.storeName)
+            $('#node-input-storeName').val(node.storeName)  // disable if not checked
             $("#node-input-persist").on("change", function(e) { 
                 $("#node-input-storeName").prop("disabled", !$(this).prop("checked"))
             });
@@ -142,8 +142,9 @@
 <!-- max queue length & keep newest -->
     <div class="form-row">
         <label for="node-input-maxQueueLength"><i class="fa fa-exclamation-triangle"></i> 
-        Max queue (< 1, no limit)</label>
-        <input type="number" id="node-input-maxQueueLength" placeholder="100" style="width:20%">
+        Max queue</label>
+        <input type="number" id="node-input-maxQueueLength" placeholder="100" style="width:10%">
+        &nbsp; (< 1, no limit)
         <span>&emsp;&emsp;&emsp;&emsp;</span>
         <label for="node-input-keepNewest" style="width:25%; display:inline">
         <input type="checkbox" id="node-input-keepNewest" style="display:inline-block; width:15px; vertical-align:baseline;">
@@ -184,5 +185,4 @@
     (checkbox) in the edit dialog and has chosen a persistent form of context storage in the 
     adjacent dropdown list. In that case, the node will enter the state it was in 
     prior to the re-deploy or restart and will also restore the message queue.</p>
-
 </script>

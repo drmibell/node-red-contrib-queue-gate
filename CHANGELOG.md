@@ -1,3 +1,4 @@
+- 1.5.2 (2020-12-30) Cosmetic changes.
 - 1.5.1 (2020-11-11) Clone message from `peek`.
 - 1.5.0 (2020-11-09) Select context store.
 - 1.4.0 (2020-04-08)

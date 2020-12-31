@@ -5,8 +5,8 @@
     "license": "Apache-2.0",
     "author": {
         "name": "Michael.I. Bell"
-        },
-        "contributors": [
+    },
+    "contributors": [
         {
             "name": "Simon Walters",
             "url": "https://github.com/cymplecy"

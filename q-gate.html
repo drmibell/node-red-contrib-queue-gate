@@ -62,6 +62,8 @@
             $("#node-input-persist").on("change", function(e) { 
                 $("#node-input-storeName").prop("disabled", !$(this).prop("checked"))
             });
+            const version = RED.nodes.registry.getModule("node-red-contrib-queue-gate").version
+            $('#node-version').append(` ${version}`)
         }
     });
 </script>
@@ -160,7 +162,10 @@
 <!-- Name -->  
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <input type="text" id="node-input-name" placeholder="Name" style="width:50%">
+        <span>&emsp;&emsp;</span>
+        <label id="node-version" style="width:auto" >Version</label>
+
     </div>
 </script>
 

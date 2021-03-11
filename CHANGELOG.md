@@ -1,4 +1,10 @@
-- 1.5.2 (2020-12-30) Cosmetic changes.
+- 1.5.3 (2021-03-03) 
+    - Handle undefined or null control payload. 
+    - Update CHANGELOG. 
+    - Add version number to edit dialog.
+- 1.5.2 (2020-12-30)
+    - Cosmetic changes. 
+    - Add lockfile.
 - 1.5.1 (2020-11-11) Clone message from `peek`.
 - 1.5.0 (2020-11-09) Select context store.
 - 1.4.0 (2020-04-08)
@@ -11,7 +17,11 @@
 - 1.0.3 (2018-11-15) Use ring instead of dot for `closed` status.
 - 1.0.2 (2018-11-06) Delete `msg.topic` input.
 - 1.0.1 (2018-11-06) Use en dash in `palletLabel`.
-- 1.0.0 (2018-11-05) Change `purge` to `reset`. First stable release.
+- 1.0.0 (2018-11-05)
+    - Change `purge` to `reset`.
+    - First stable release.
 - 0.0.3 (2018-10-20) Save queue on startup.
-- 0.0.2 (2018-10-14) Add `node-red` keyword.
+- 0.0.2 (2018-10-14) 
+    - First official release.
+    - Add `node-red` keyword.
 - 0.0.1 (2018-09-29) Initial commit.

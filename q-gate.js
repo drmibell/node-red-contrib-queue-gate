@@ -79,8 +79,12 @@ module.exports = function(RED) {
         node.on('input', function(msg) {
             var state = context.get('state',storeName) || node.defaultState;
             var queue = context.get('queue',storeName) || [];
-            if (typeof msg.topic === 'string' && msg.topic.toLowerCase() === node.controlTopic) {
+            if (typeof msg.topic === 'string' && 
+                msg.topic.toLowerCase() === node.controlTopic) {
             // Change state
+                if (typeof msg.payload === 'undefined' || msg.payload === null) {
+                    msg.payload = '';
+                }
                 switch (msg.payload.toString().toLowerCase()) {
                     case node.openCmd:
                     // flush then open
@@ -97,7 +101,7 @@ module.exports = function(RED) {
                         state = 'queueing';
                         break;
                     case node.toggleCmd:
-                        if (!node.qToggle) {
+                        if (!node.qToggle) {    // default toggle
                             switch (state) {
                                 case 'open':
                                     state = 'closed';
@@ -107,7 +111,7 @@ module.exports = function(RED) {
                                     break;
                             }
                         } else {
-                            switch (state) {
+                            switch (state) {    // optional toggle
                                 case 'open':
                                     state = 'queueing';
                                     break;

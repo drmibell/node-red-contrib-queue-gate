@@ -35,6 +35,7 @@
             resetCmd: {value:"reset"},
             peekCmd: {value:"peek"},
             dropCmd: {value:"drop"},
+            filterCmd : {value:"filter"},
             statusCmd: {value:"status"},
             maxQueueLength: {value:"100"},
             keepNewest: {value:false},
@@ -138,6 +139,11 @@
         <span>&emsp;&emsp;&emsp;&emsp;</span>
         <label for="node-input-dropCmd"><i class="fa fa-times"></i> Drop</label>
         <input type="text" id="node-input-dropCmd" placeholder="drop" style="width:20%">
+    </div>
+<!-- filterCmd --> 
+    <div class="form-row">
+        <label for="node-input-filterCmd"><i class="fa fa-filter"></i> Filter</label>
+        <input type="text" id="node-input-filterCmd" placeholder="filter" style="width:20%">
     </div>
 <!-- max queue length & keep newest -->
     <div class="form-row">

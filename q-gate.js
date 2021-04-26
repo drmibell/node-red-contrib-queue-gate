@@ -36,6 +36,7 @@ module.exports = function(RED) {
         this.peekCmd = (config.peekCmd || "peek").toLowerCase();
         this.dropCmd = (config.dropCmd || "drop").toLowerCase();
         this.statusCmd = (config.statusCmd || "status").toLowerCase();
+        this.filterCmd = (config.filterCmd || "filter").toLowerCase();
         this.defaultCmd = config.defaultCmd.toLowerCase();
         this.defaultState = config.defaultState.toLowerCase();
         this.maxQueueLength = config.maxQueueLength;
@@ -159,6 +160,23 @@ module.exports = function(RED) {
                     default:
                         node.warn('Invalid command ignored');
                         break;
+                    case node.filterCmd:
+                    // Filter messages from queue
+                        var f = msg.filter
+                        var k = getPath(f)
+                        var v = eval('f.'+k.join('.') )
+                        var r = []
+                        // create array of  msg indexes matching filter from queue
+                        queue.filter(function(itm, indx){
+                            if (eval('itm.'+k.join('.')) == v){
+                                r.push(indx)
+                            }
+                        });
+                        //remove indexes in r from queue
+                        r.reverse().forEach(i => {
+                            queue.splice(i, 1)
+                        });
+                        break
                 }
                 // Save state
                 context.set('state',state,storeName);
@@ -205,6 +223,19 @@ module.exports = function(RED) {
                     }
                 }
             })
+        }
+        function getPath(obj) {
+            for(var key in obj) {                                   // for each key in obj (obj is either an object or an array)
+                if(obj[key] && typeof obj[key] === "object") {      // if the current property (value of obj[key]) is also an object/array
+                    var path = getPath(obj[key]);                    // try finding item in that object
+                    if(path) {                                    // if we find it
+                        path.unshift(key);                        // we shift the current key to the path array (result will be an array of keys)
+                        return path;                              // and we return it to our caller
+                    }
+                } else if(typeof(obj[key]) != 'object') {           // otherwise (if obj[key] is not an object or array) we check if it is the item we're looking for
+                    return [key];                                   // if it is then we return the path array (this is where the path array get constructed)
+                }
+            }
         }
     RED.nodes.registerType("q-gate",QueueGateNode);
 }

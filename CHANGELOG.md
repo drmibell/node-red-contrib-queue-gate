@@ -1,26 +1,27 @@
-- 1.5.3 (2021-03-03) 
-    - Handle undefined or null control payload. 
-    - Update CHANGELOG. 
+- 1.5.3 (2021-04-29) 
+    - Handle undefined or null control payload.
+    - Enable "Keep Keep Newest Messages" in example. Fixes [#18](https://github.com/drmibell/node-red-contrib-queue-gate/issues/18).
+    - README: remove JSON and add links to GitHub.
     - Add version number to edit dialog.
 - 1.5.2 (2020-12-30)
     - Cosmetic changes. 
     - Add lockfile.
-- 1.5.1 (2020-11-11) Clone message from `peek`.
-- 1.5.0 (2020-11-09) Select context store.
+- 1.5.1 (2020-11-11) Clone message from `peek`. Fixes issue raised on [forum](https://discourse.nodered.org/t/weird-issue-with-node-red-contrib-queue-gate/35677).
+- 1.5.0 (2020-11-09) Select context store. Fixes [#13](https://github.com/drmibell/node-red-contrib-queue-gate/issues/13).
 - 1.4.0 (2020-04-08)
     - Add `peek`, `drop`, and `status` commands.
     - Allow numeric and boolean commands.
-- 1.3.0 (2019-09-12) Add optional `toggle` command behavior.
-- 1.2.0 (2019-07-19) Persistence.
+- 1.3.0 (2019-09-12) Add optional `toggle` command behavior. Fixes issue raised by PR [#7](https://github.com/drmibell/node-red-contrib-queue-gate/pull/7).
+- 1.2.0 (2019-07-19) Persistence. Fixes [#6](https://github.com/drmibell/node-red-contrib-queue-gate/issues/6).
 - 1.1.1 (2019-01-28) Update documentation.
-- 1.1.0 (2019-01-02) Add `keep newest messages` option.
-- 1.0.3 (2018-11-15) Use ring instead of dot for `closed` status.
+- 1.1.0 (2019-01-02) Add `keep newest messages` option. Fixes [#3](https://github.com/drmibell/node-red-contrib-queue-gate/issues/3).
+- 1.0.3 (2018-11-15) Use ring instead of dot for `closed` status. Fixes issue raised on [forum]().
 - 1.0.2 (2018-11-06) Delete `msg.topic` input.
-- 1.0.1 (2018-11-06) Use en dash in `palletLabel`.
+- 1.0.1 (2018-11-06) Use en dash in `palletLabel`. Fixes issue raised on [forum](https://discourse.nodered.org/t/announce-node-red-contrib-queue-gate/3948/12?u=drmibell).
 - 1.0.0 (2018-11-05)
-    - Change `purge` to `reset`.
+    - Change `purge` to `reset`. Fixes issue raised on [forum](https://discourse.nodered.org/t/announce-node-red-contrib-queue-gate/3948/8?u=drmibell).
     - First stable release.
-- 0.0.3 (2018-10-20) Save queue on startup.
+- 0.0.3 (2018-10-20) Save queue on startup. Fixes [#1](https://github.com/drmibell/node-red-contrib-queue-gate/issues/1).
 - 0.0.2 (2018-10-14) 
     - First official release.
     - Add `node-red` keyword.

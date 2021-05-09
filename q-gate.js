@@ -249,21 +249,18 @@ module.exports = function(RED) {
         }
 
         function expire(id, queue, node, storeName){
-            
             queue.filter(function(itm, indx){
-                if (itm._qttlid == id){
-                    var m = queue.splice(indx, 1)
-                    console.log(m)
+                if (itm._qttlid == id){                             // Check for msg with _qttlid in the queue
+                    var m = queue.splice(indx, 1)                   // Remove message from queue
+                    node.log("Expiring: "+m._msgid);                // Log the _msgid to INFO log
+                    let queueStatus = {fill:'yellow'};              // Update queueStatus
+                    queueStatus.text = 'queuing: ' + queue.length;
+                    queueStatus.shape = (queue.length < node.maxQueueLength) ? 'ring':'dot';
+                    node.status(queueStatus);                       // Set status
+                    
                 }
             });
-            var context = node.context();
-            var state = context.get('state',storeName)
-            if (state == 'queueing'){
-                let queueStatus = {fill:'yellow'};
-                queueStatus.text = 'queuing: ' + queue.length;
-                queueStatus.shape = (queue.length < node.maxQueueLength) ? 'ring':'dot';
-                node.status(queueStatus);
-            }
+            
         }
 
     RED.nodes.registerType("q-gate",QueueGateNode);

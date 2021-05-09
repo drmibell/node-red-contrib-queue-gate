@@ -36,12 +36,14 @@ module.exports = function(RED) {
         this.peekCmd = (config.peekCmd || "peek").toLowerCase();
         this.dropCmd = (config.dropCmd || "drop").toLowerCase();
         this.statusCmd = (config.statusCmd || "status").toLowerCase();
+        this.renegeCmd = (config.renegeCmd || "renege").toLowerCase();
         this.defaultCmd = config.defaultCmd.toLowerCase();
         this.defaultState = config.defaultState.toLowerCase();
         this.maxQueueLength = config.maxQueueLength;
         this.keepNewest = config.keepNewest;
         this.persist = config.persist;
         this.storeName = config.storeName;
+        this.ttl = config.ttl
         // Save "this" object
         var node = this;
         var context = node.context();
@@ -49,13 +51,16 @@ module.exports = function(RED) {
         var storeName = node.storeName
         var state = context.get('state',storeName);
         var queue = context.get('queue',storeName);
+        var expirejobs = context.get('expirejobs',storeName);
         if (!persist || typeof state === 'undefined') {
             state = node.defaultState;
             queue = [];
+            expirejobs = {};
         }
         // Gate status & max queue size
         context.set('state',state,storeName);
         context.set('queue',queue,storeName);
+        context.set('expirejobs',expirejobs,storeName);
         if (node.maxQueueLength <= 0) {
             node.maxQueueLength = Infinity;
         }
@@ -127,8 +132,8 @@ module.exports = function(RED) {
                         if (state === 'queueing') {
                         // Dequeue
                         if (queue.length > 0) {
-                            node.send(queue.shift());
-                            }
+                            node.send(queue.shift());                           
+                        }
                         }
                         break;
                     case node.peekCmd:
@@ -152,6 +157,7 @@ module.exports = function(RED) {
                         break;
                     case node.flushCmd:
                         node.send([queue]);
+                        
                     case node.resetCmd:
                         queue = [];
                         break;
@@ -163,6 +169,23 @@ module.exports = function(RED) {
                     default:
                         node.warn('Invalid command ignored');
                         break;
+                    case node.renegeCmd:
+                    // Filter messages from queue
+                        var f = msg[node.renegeCmd]
+                        var k = getPath(f)
+                        var v = eval('f.'+k.join('.') )
+                        var r = []
+                        // create array of  msg indexes matching filter from queue
+                        queue.filter(function(itm, indx){
+                            if (eval('itm.'+k.join('.')) == v){
+                                r.push(indx)
+                            }
+                        });
+                        //remove indexes in r from queue
+                        r.reverse().forEach(i => {
+                            queue.splice(i, 1)
+                        });
+                        break
                 }
                 // Save state
                 context.set('state',state,storeName);
@@ -191,6 +214,11 @@ module.exports = function(RED) {
                         node.send(null);
                         break;
                     case 'queueing':
+                        // Check if TTL is set and use setTimeout to expire message
+                        if (node.ttl != 0){
+                            msg._qttlid = RED.util.generateId()
+                            setTimeout(expire, node.ttl, msg._qttlid, queue, node, storeName)
+                        }
                         // Enqueue
                         if (queue.length < node.maxQueueLength) {
                             queue.push(msg);
@@ -210,5 +238,34 @@ module.exports = function(RED) {
                 }
             })
         }
+        function getPath(obj) {
+            for(var key in obj) {                                   // for each key in obj (obj is either an object or an array)
+                if(obj[key] && typeof obj[key] === "object") {      // if the current property (value of obj[key]) is also an object/array
+                    var path = getPath(obj[key]);                    // try finding item in that object
+                    if(path) {                                    // if we find it
+                        path.unshift(key);                        // we shift the current key to the path array (result will be an array of keys)
+                        return path;                              // and we return it to our caller
+                    }
+                } else if(typeof(obj[key]) != 'object') {           // otherwise (if obj[key] is not an object or array) we check if it is the item we're looking for
+                    return [key];                                   // if it is then we return the path array (this is where the path array get constructed)
+                }
+            }
+        }
+
+        function expire(id, queue, node, storeName){
+            queue.filter(function(itm, indx){
+                if (itm._qttlid == id){                             // Check for msg with _qttlid in the queue
+                    var m = queue.splice(indx, 1)                   // Remove message from queue
+                    node.log("Expiring: "+m._msgid);                // Log the _msgid to INFO log
+                    let queueStatus = {fill:'yellow'};              // Update queueStatus
+                    queueStatus.text = 'queuing: ' + queue.length;
+                    queueStatus.shape = (queue.length < node.maxQueueLength) ? 'ring':'dot';
+                    node.status(queueStatus);                       // Set status
+                    
+                }
+            });
+            
+        }
+
     RED.nodes.registerType("q-gate",QueueGateNode);
 }

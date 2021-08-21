@@ -21,7 +21,12 @@ Control messages can have values representing commands that change the state of 
 
 The `peek` command sends the oldest message but does not remove it from the queue; the `drop` command removes the oldest message from the queue without sending it.  The two may be used together to get the oldest message, perform some action, and then remove it from the queue only when it has been successfully serviced. This is illustrated in the *Retain Until Processed* example below. The `status` command can be used in conjunction with a Status node to obtain the current state of the gate or the number of messages in the queue. This is shown in the *Basic Operation* flow. (Thanks to Colin Law for suggesting and implementing these commands.)
 
+The `renege` command is used to remove specific messages from the queue based on a  property supplied in `msg.renege` for example to remove a message with a `userId` of `123` you would set `msg.renege` to `{"payload" : { "userId" : 123}}` The object should contain the path to the property and the value that matches the message or messages that you want to remove this can be any part of the message eg topic or payload.
+The property cannot contain any array/index values only the path of an object property. If you change the value of the  command eg to `foo` then the object that contains the property will also change eg to `msg.foo`
+
 When first deployed or after a `default` command, the gate is in the user-selected state defined by `Default State`. (See below regarding persistence.) When a valid control message is received, the gate performs one of the following actions, depending on its state:
+
+A queue can may have a `TTL` value set which is the number of miliseconds that a message will wait in the queue before it expires, set this to `0` to disable message expiry. The `_msgid` of an expired message is written as an INFO event in the NodeRED log.
 
 <p align="center"> <img src="https://github.com/drmibell/node-red-contrib-queue-gate/blob/master/images/actions.png?raw=true" width="85%"></p>
 

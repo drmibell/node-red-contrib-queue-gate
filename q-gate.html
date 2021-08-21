@@ -35,6 +35,8 @@
             resetCmd: {value:"reset"},
             peekCmd: {value:"peek"},
             dropCmd: {value:"drop"},
+            renegeCmd : {value:"renege"},
+            ttl: {"value":0},
             statusCmd: {value:"status"},
             maxQueueLength: {value:"100"},
             keepNewest: {value:false},
@@ -60,7 +62,7 @@
             }
             $('#node-input-storeName').val(node.storeName)  // disable if not checked
             $("#node-input-persist").on("change", function(e) { 
-                $("#node-input-storeName").prop("disabled", !$(this).prop("checked"))
+            $("#node-input-storeName").prop("disabled", !$(this).prop("checked"))
             });
             const version = RED.nodes.registry.getModule("node-red-contrib-queue-gate").version
             $('#node-version').append(` ${version}`)
@@ -141,6 +143,15 @@
         <label for="node-input-dropCmd"><i class="fa fa-times"></i> Drop</label>
         <input type="text" id="node-input-dropCmd" placeholder="drop" style="width:20%">
     </div>
+<!-- renegeCmd --> 
+    <div class="form-row">
+            <label for="node-input-renegeCmd"><i class="fa fa-filter"></i> Renege</label>
+            <input type="text" id="node-input-renegeCmd" placeholder="renege" style="width:20%">
+        <span>&emsp;&emsp;&emsp;&emsp;</span>
+            <label for="node-input-ttl"><i class="fa fa-clock-o"></i>TTL</label>
+            <input type="text" id="node-input-ttl" placeholder="0" style="width:20%">
+    </div>
+    
 <!-- max queue length & keep newest -->
     <div class="form-row">
         <label for="node-input-maxQueueLength"><i class="fa fa-exclamation-triangle"></i> 

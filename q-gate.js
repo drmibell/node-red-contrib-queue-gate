@@ -164,7 +164,7 @@ module.exports = function(RED) {
                         node.warn('Invalid command ignored');
                         break;
                 }
-                // Save state
+                // Save state and queue
                 context.set('state',state,storeName);
                 context.set('queue',queue,storeName);
                 // Show status
@@ -206,9 +206,13 @@ module.exports = function(RED) {
                         break;
                     default:
                         node.error('Invalid state');
-                    }
                 }
-            })
-        }
+                    
+            }
+            // Save state and queue
+            context.set('state',state,storeName);
+            context.set('queue',queue,storeName);
+        })
+    }
     RED.nodes.registerType("q-gate",QueueGateNode);
 }

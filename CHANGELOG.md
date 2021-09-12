@@ -1,3 +1,5 @@
+- 1.5.4 (2021-09-12) Save queue in context store. Fixes Case 2 of
+[#22](https://github.com/drmibell/node-red-contrib-queue-gate/issues/22).
 - 1.5.3 (2021-04-29) 
     - Handle undefined or null control payload.
     - Enable "Keep Keep Newest Messages" in example. Fixes [#18](https://github.com/drmibell/node-red-contrib-queue-gate/issues/18).

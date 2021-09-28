@@ -1,3 +1,7 @@
+- 1.5.5 (2021.09.28) 
+    - Allow asynchronous context set and get. Fixes Case 1 of
+[#22](https://github.com/drmibell/node-red-contrib-queue-gate/issues/22).
+    - Fix error loading in NR versions 0.18 and earlier.
 - 1.5.4 (2021-09-12) Save queue in context store. Fixes Case 2 of
 [#22](https://github.com/drmibell/node-red-contrib-queue-gate/issues/22).
 - 1.5.3 (2021-04-29) 

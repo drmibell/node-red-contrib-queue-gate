@@ -40,7 +40,9 @@
             keepNewest: {value:false},
             qToggle: {value:false},
             persist: {value:false},
-            storeName: {value:RED.settings.context.default}
+//            storeName: {value:RED.settings.context.default},
+            storeName: {value: RED.settings.hasOwnProperty('context') ? 
+               RED.settings.context.default : 'default'}            
         },
         inputs:1,
         outputs:1,

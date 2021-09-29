@@ -1,5 +1,5 @@
 /**
- * Copyright 2018-2020 M. I. Bell
+ * Copyright 2018-2021 M. I. Bell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,6 @@
 module.exports = function(RED) {
     function QueueGateNode(config) {
         RED.nodes.createNode(this,config);
-        const openStatus = {fill:'green',shape:'dot',text:'open'};
-        const closedStatus = {fill:'red',shape:'ring',text:'closed'};
-        var queueStatus = {fill:'yellow'};
-        var maxQueueLength; // debug: is this needed?
-        // Copy configuration items
         this.controlTopic = config.controlTopic.toLowerCase();
         this.openCmd = config.openCmd.toLowerCase();
         this.closeCmd = config.closeCmd.toLowerCase();
@@ -43,11 +38,14 @@ module.exports = function(RED) {
         this.keepNewest = config.keepNewest;
         this.persist = config.persist;
         this.storeName = config.storeName
-        // Save "this" object
+
         var node = this;
         var context = node.context();
         var persist = node.persist;
         var storeName = node.storeName
+        const openStatus = {fill:'green',shape:'dot',text:'open'};
+        const closedStatus = {fill:'red',shape:'ring',text:'closed'};
+        var queueStatus = {fill:'yellow'};
 
         context.get(['state','queue'],storeName,function(err,state,queue) {
             if (err) {
@@ -162,8 +160,7 @@ module.exports = function(RED) {
                             node.warn('Invalid command ignored');
                             break;
                     }
-                    // Show status
-                    switch (state) {
+                    switch (state) {    // show status
                         case 'open':
                             node.status(openStatus);
                             break;
@@ -171,23 +168,18 @@ module.exports = function(RED) {
                             node.status(closedStatus);
                             break;
                         case 'queueing':
-//                            node.warn (typeof queue)    // debug
                             queueStatus.text = 'queuing: ' + queue.length;
                             queueStatus.shape = (queue.length < node.maxQueueLength) ? 'ring':'dot';
                             node.status(queueStatus);
                         }
                     } else {
-                    // Process message
-                    switch (state) {
+                    switch (state) {    // process message
                         case 'open':
                             node.send(msg);
                             break;
                         case 'closed':
-                            node.send(null);
                             break;
-                        case 'queueing':
-                            // Enqueue
-//                            node.warn (typeof queue)    // debug
+                        case 'queueing':    // enqueue
                             if (queue.length < node.maxQueueLength) {
                                 queue.push(msg);
                             } else {
@@ -196,7 +188,6 @@ module.exports = function(RED) {
                                 queue.shift();
                                 }
                             }
-//                            node.warn (typeof queue)    // debug
                             queueStatus.text = 'queuing: ' + queue.length;
                             queueStatus.shape = (queue.length < node.maxQueueLength) ? 'ring':'dot';
                             node.status(queueStatus);
